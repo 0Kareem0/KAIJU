@@ -6,7 +6,7 @@ import Footer from "./components/Footer";
 
 export default function App() {
   return (
-    <>
+    <div className="bg-zinc-950">
       <Navbar />
       <main className="min-h-screen">
         <HeroSection />
@@ -14,6 +14,6 @@ export default function App() {
         <GenresSection />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
