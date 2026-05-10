@@ -1,3 +1,19 @@
+import Navbar from "./components/Navbar";
+import HeroSection from "./components/HeroSection";
+import TrendingSection from "./components/TrendingSection";
+import GenresSection from "./components/GenresSection";
+import Footer from "./components/Footer";
+
 export default function App() {
-  return <p className="text-3xl text-gray-900 flex items-center justify-center h-screen">Hello World</p>
+  return (
+    <>
+      <Navbar />
+      <main className="min-h-screen">
+        <HeroSection />
+        <TrendingSection />
+        <GenresSection />
+      </main>
+      <Footer />
+    </>
+  );
 }
