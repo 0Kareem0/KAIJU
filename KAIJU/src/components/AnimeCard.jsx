@@ -1,4 +1,5 @@
-export default function AnimeCard() {
+export default function AnimeCard({data}) {
+
 return (
     <div className="group rounded-3xl overflow-hidden bg-zinc-900/70 border border-white/5 hover:border-purple-500/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
       <div className="relative h-72 bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center text-zinc-500 overflow-hidden">
