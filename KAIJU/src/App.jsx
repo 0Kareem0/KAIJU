@@ -5,7 +5,6 @@ import GenresSection from "./components/GenresSection";
 import Footer from "./components/Footer";
 
 export default function App() {
-  console.log("spacing");
   
   return (
     <div className="bg-zinc-950">
