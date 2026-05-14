@@ -1,4 +1,4 @@
-export default function AnimeCard({data}) {
+export default function AnimeCard({topAnime}) {
 
 return (
     <div className="group rounded-3xl overflow-hidden bg-zinc-900/70 border border-white/5 hover:border-purple-500/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
@@ -6,13 +6,13 @@ return (
         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
     
         <div className="absolute inset-0">
-          <img className="w-full h-full object-cover" src={data.images?.jpg?.image_url} alt={data.title} />
+          <img className="w-full h-full object-cover" src={topAnime.images?.jpg?.image_url} alt={topAnime.title} />
         </div>
    
         <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
           <div className="flex items-center gap-2 bg-black/70 px-2 py-1 rounded-full">
             <span className="text-yellow-400 ">⭐</span>
-            <span className="text-white text-sm font-semibold">{data.score}</span>
+            <span className="text-white text-sm font-semibold">{topAnime.score}</span>
           </div>
           <button className="p-2 rounded-full bg-black/70 hover:bg-gray-700/50 transition-colors hover:scale-110">
             <span className="text-white">🤍</span>
@@ -22,16 +22,16 @@ return (
 
       <div className="p-5 space-y-4">
         <div>
-          <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors truncate">{data.title}</h3>
-          <p className="text-zinc-500 text-sm mt-2 truncate">{data.genres?.map((genre) => genre.name).join(", ")}</p>
+          <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors truncate">{topAnime.title}</h3>
+          <p className="text-zinc-500 text-sm mt-2 truncate">{topAnime.genres?.map((genre) => genre.name).join(", ")}</p>
         </div>
 
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-            <span className="text-green-400">{data.status}</span>
+            <span className="text-green-400">{topAnime.status}</span>
           </div>
-          <span className="text-zinc-400">{data.episodes} Episodes</span>
+          <span className="text-zinc-400">{topAnime.episodes} Episodes</span>
         </div>
 
         <div className="flex gap-2">

@@ -1,4 +1,4 @@
-export default function HeroSection() {
+export default function HeroSection({topAnime, newEpisodes}) {
  return (
     <section className="relative max-w-7xl mx-auto px-6 pt-20 pb-28 grid lg:grid-cols-2 gap-14 items-center overflow-hidden">
       <div className="space-y-8">
@@ -25,24 +25,16 @@ export default function HeroSection() {
           </button>
         </div>
       </div>
-
+          
       <div  className="relative group">  
         <div className="absolute inset-0 bg-linear-to-r from-purple-600/20 to-pink-600/20 rounded-4xl blur-3xl group-hover:blur-3xl transition-all duration-500 animate-pulse"></div>
-        <div className="relative rounded-4xl border border-white/10 bg-linear-to-br from-zinc-900/80 to-purple-900/20 h-[600px] flex flex-col items-center justify-center text-zinc-400 overflow-hidden backdrop-blur-xl hover:border-purple-500/30 transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
-          <div className="absolute top-0 left-0 w-full h-full bg-linear-to-br from-purple-500/5 via-transparent to-pink-500/5"></div>
-          <div className="relative z-10 text-center space-y-6 p-8">
-            <div className="w-32 h-32 mx-auto rounded-full bg-linear-to-r from-purple-500 to-pink-500 flex items-center justify-center animate-spin-slow">
-              <span className="text-4xl">🎌</span>
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-2xl font-bold text-white">Featured Anime</h3>
-              <p className="text-zinc-400">Experience the best of Japanese animation</p>
-            </div>
-            <div className="flex justify-center gap-4">
-              <div className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-sm">HD Quality</div>
-              <div className="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 text-sm">New Episodes</div>
-            </div>
-          </div>
+        <div className="relative rounded-4xl border border-white/10 bg-linear-to-br from-zinc-900/80 to-purple-900/20 h-150 flex flex-col items-center justify-center text-zinc-400 overflow-hidden backdrop-blur-xl hover:border-purple-500/30 transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
+        <div className="absolute top-0 left-0 w-full h-full bg-linear-to-br from-purple-500/5 via-transparent to-pink-500/5"></div>
+           
+           
+           <img className="object-cover w-full h-full" src={newEpisodes?.images?.jpg?.image_url || "poster.jpeg"} alt="Poster" />
+           {/* <img className="object-cover w-full h-full" src="poster.jpeg" alt="Poster" /> */}
+
         </div>
       </div>
     </section>

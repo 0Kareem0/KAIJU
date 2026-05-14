@@ -6,35 +6,53 @@ import Footer from "./components/Footer";
 import { useEffect, useState } from "react";
 
 export default function App() {
-    const [data, setData] = useState(null);
+  const [topAnime, setTopAnime] = useState([])
+  const [newEpisodes, setNewEpisodes] = useState([])
     // const [anime , setAnime] = useState("naruto");
 
   
   useEffect(()=>{                                                                                         
-    const getData = async()=>{                                                                            
+    const getTopAnimeData = async()=>{                                                                            
       try {                                                                                               
         const res = await fetch(`https://api.jikan.moe/v4/top/anime`);                             
         if (!res.ok) {                                                                                    
           throw new Error(`HTTP error! status: ${res.status}`);                                           
         }                                                                                                 
         const result = await res.json();                                                                  
-        setData(result.data);                                                                             
-        console.log(result);                                                                              
+        setTopAnime(result.data);                                                                               
       } catch (error) {                                                                                   
         console.error('Failed to fetch anime data:', error);                                              
-        // Optionally set an error state to show user-friendly message                                    
       }                                                                                                   
     };                                                                                                    
-    getData();                                                                                            
+    getTopAnimeData();                                                                                            
   }, []);  
+
+
+  useEffect(() => {
+     const getNewEpisodes = async() => {
+      try {
+        const res = await fetch(`https://api.jikan.moe/v4/characters/1/full`);
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const result = await res.json();
+        setNewEpisodes(result.data);
+        console.log(result);
+        
+      } catch (error) {
+        console.error('Failed to fetch episodes data:', error);
+      }
+     }
+     getNewEpisodes();
+  }, []);
 
   return (
     <div className="bg-zinc-950">
       <Navbar />
       <main className="min-h-screen">
-        <HeroSection data={data} />
-        <TrendingSection data={data} />
-        <GenresSection data={data} />
+        <HeroSection topAnime={topAnime} newEpisodes={newEpisodes}   />
+        <TrendingSection topAnime={topAnime} newEpisodes={newEpisodes} />
+        <GenresSection topAnime={topAnime} newEpisodes={newEpisodes} />
       </main>
       <Footer />
     </div>
