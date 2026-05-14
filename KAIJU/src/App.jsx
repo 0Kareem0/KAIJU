@@ -13,9 +13,9 @@ export default function App() {
 useEffect(()=>{
   const getData = async()=>{
     const res = await fetch(`https://api.jikan.moe/v4/anime?q=${anime}`);
-    const data = await res.json();
-    setData(data.data);
-    console.log(data);
+    const result = await res.json();
+    setData(result.data);
+    console.log(result);
     
   };
   getData();

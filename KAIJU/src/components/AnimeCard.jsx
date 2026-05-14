@@ -26,7 +26,7 @@ return (
 
       <div className="p-5 space-y-4">
         <div>
-          <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors">Anime Title</h3>
+          <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors">{data.title}</h3>
           <p className="text-zinc-500 text-sm mt-2">Genre • Type</p>
         </div>
 

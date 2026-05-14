@@ -1,6 +1,7 @@
 import AnimeCard from "./AnimeCard";
 
 export default function TrendingSection({data}) {
+  const animeCards = data.map((d) => <AnimeCard key={d.id} data={d} />);
   return (
     <section className="max-w-7xl mx-auto px-6 pb-24">
       <div className="flex items-center justify-between mb-10">
@@ -13,11 +14,9 @@ export default function TrendingSection({data}) {
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <AnimeCard data={data[0]} />
-        <AnimeCard data={data[1]} />
-        <AnimeCard data={data[2]} />
-        <AnimeCard data={data[3]} />
+        {animeCards}
       </div>
+      
     </section>
   );
 }

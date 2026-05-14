@@ -1,4 +1,4 @@
-export default function HeroSection({data}) {
+export default function HeroSection() {
  return (
     <section className="relative max-w-7xl mx-auto px-6 pt-20 pb-28 grid lg:grid-cols-2 gap-14 items-center overflow-hidden">
       <div className="space-y-8">
