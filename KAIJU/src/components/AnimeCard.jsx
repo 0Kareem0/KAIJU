@@ -2,40 +2,36 @@ export default function AnimeCard({data}) {
 
 return (
     <div className="group rounded-3xl overflow-hidden bg-zinc-900/70 border border-white/5 hover:border-purple-500/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
-      <div className="relative h-72 bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center text-zinc-500 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-300 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          EP 12
+      <div className="relative h-72 bg-linear-to-br from-zinc-800 to-zinc-900 flex items-center justify-center text-zinc-500 overflow-hidden">
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    
+        <div className="absolute inset-0">
+          <img className="w-full h-full object-cover" src={data.images?.jpg?.image_url} alt={data.title} />
         </div>
-        <div className="relative z-10 text-center space-y-2">
-          <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 flex items-center justify-center">
-            <span className="text-3xl">🎬</span>
-          </div>
-          <p className="text-sm">Anime Cover</p>
-        </div>
+   
         <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-          <div className="flex items-center gap-2">
-            <span className="text-yellow-400">⭐</span>
-            <span className="text-white text-sm font-semibold">8.5</span>
+          <div className="flex items-center gap-2 bg-black/70 px-2 py-1 rounded-full">
+            <span className="text-yellow-400 ">⭐</span>
+            <span className="text-white text-sm font-semibold">{data.score}</span>
           </div>
-          <button className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
-            <span className="text-white">❤️</span>
+          <button className="p-2 rounded-full bg-black/70 hover:bg-gray-700/50 transition-colors hover:scale-110">
+            <span className="text-white">🤍</span>
           </button>
         </div>
       </div>
 
       <div className="p-5 space-y-4">
         <div>
-          <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors">{data.title}</h3>
-          <p className="text-zinc-500 text-sm mt-2">Genre • Type</p>
+          <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors truncate">{data.title}</h3>
+          <p className="text-zinc-500 text-sm mt-2 truncate">{data.genres?.map((genre) => genre.name).join(", ")}</p>
         </div>
 
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-            <span className="text-green-400">Ongoing</span>
+            <span className="text-green-400">{data.status}</span>
           </div>
-          <span className="text-zinc-400">24 Episodes</span>
+          <span className="text-zinc-400">{data.episodes} Episodes</span>
         </div>
 
         <div className="flex gap-2">

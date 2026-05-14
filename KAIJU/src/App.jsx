@@ -7,19 +7,26 @@ import { useEffect, useState } from "react";
 
 export default function App() {
     const [data, setData] = useState(null);
-    const [anime , setAnime] = useState("naruto");
+    // const [anime , setAnime] = useState("naruto");
 
   
-useEffect(()=>{
-  const getData = async()=>{
-    const res = await fetch(`https://api.jikan.moe/v4/anime?q=${anime}`);
-    const result = await res.json();
-    setData(result.data);
-    console.log(result);
-    
-  };
-  getData();
-}, [anime]);
+  useEffect(()=>{                                                                                         
+    const getData = async()=>{                                                                            
+      try {                                                                                               
+        const res = await fetch(`https://api.jikan.moe/v4/top/anime`);                             
+        if (!res.ok) {                                                                                    
+          throw new Error(`HTTP error! status: ${res.status}`);                                           
+        }                                                                                                 
+        const result = await res.json();                                                                  
+        setData(result.data);                                                                             
+        console.log(result);                                                                              
+      } catch (error) {                                                                                   
+        console.error('Failed to fetch anime data:', error);                                              
+        // Optionally set an error state to show user-friendly message                                    
+      }                                                                                                   
+    };                                                                                                    
+    getData();                                                                                            
+  }, []);  
 
   return (
     <div className="bg-zinc-950">
