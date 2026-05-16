@@ -9,7 +9,11 @@ export default function App() {
   const [topAnime, setTopAnime] = useState([])
   const [newEpisodes, setNewEpisodes] = useState([])
     // const [anime , setAnime] = useState("naruto");
+    const [searchQuery, setSearchQuery] = useState("")
 
+    const handleSearch = (newQuery) => {
+      setSearchQuery(newQuery)
+    }
   
   useEffect(()=>{                                                                                         
     const getTopAnimeData = async()=>{                                                                            
@@ -48,7 +52,7 @@ export default function App() {
 
   return (
     <div className="bg-zinc-950">
-      <Navbar />
+      <Navbar onSearch={handleSearch} />
       <main className="min-h-screen">
         <HeroSection topAnime={topAnime} newEpisodes={newEpisodes}   />
         <TrendingSection topAnime={topAnime} newEpisodes={newEpisodes} />
