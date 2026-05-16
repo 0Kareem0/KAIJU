@@ -32,8 +32,7 @@ export default function HeroSection({topAnime, newEpisodes}) {
         <div className="absolute top-0 left-0 w-full h-full bg-linear-to-br from-purple-500/5 via-transparent to-pink-500/5"></div>
            
            
-           <img className="object-cover w-full h-full" src={newEpisodes?.images?.jpg?.image_url || "poster.jpeg"} alt="Poster" />
-           {/* <img className="object-cover w-full h-full" src="poster.jpeg" alt="Poster" /> */}
+           <img className="object-cover w-full h-full  " src={newEpisodes?.images?.jpg?.image_url || "egypt.jpeg"} alt="Poster" />
 
         </div>
       </div>
