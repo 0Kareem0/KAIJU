@@ -12,7 +12,8 @@ export default function App() {
     const [searchQuery, setSearchQuery] = useState("")
 
     const handleSearch = (newQuery) => {
-      setSearchQuery(newQuery)
+      setSearchQuery(newQuery)  
+      
     }
   
   useEffect(()=>{                                                                                         
