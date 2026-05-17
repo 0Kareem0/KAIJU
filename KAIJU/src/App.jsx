@@ -42,7 +42,6 @@ export default function App() {
         }
         const result = await res.json();
         setTopManga(result.data);
-        console.log(result);
         
       } catch (error) {
         console.error('Failed to fetch episodes data:', error);
