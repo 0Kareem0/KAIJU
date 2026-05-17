@@ -49,7 +49,7 @@ export default function HeroSection({ topAnime = [] }) {
       </div>
 
       {/* RIGHT SIDE - Improved */}
-      <div className="relative group h-[520px] lg:h-[640px] flex items-center">
+      <div className="relative group h-[520px] lg:h-[640px] flex items-center hover:scale-105 transition-transform duration-300">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-500/10 to-transparent rounded-[3rem] blur-3xl group-hover:blur-[5rem] z-0" />
 
         <div className="relative w-full h-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-purple-500/30 bg-zinc-950">
