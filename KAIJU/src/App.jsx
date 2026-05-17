@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 export default function App() {
   const [topAnime, setTopAnime] = useState([])
-  const [newEpisodes, setNewEpisodes] = useState([])
+  const [topManga, setTopManga] = useState([])
     // const [anime , setAnime] = useState("naruto");
     const [searchQuery, setSearchQuery] = useState("")
 
@@ -34,30 +34,30 @@ export default function App() {
 
 
   useEffect(() => {
-     const getNewEpisodes = async() => {
+     const getTopManga = async() => {
       try {
-        const res = await fetch(`https://api.jikan.moe/v4/characters/1/full`);
+        const res = await fetch(`https://api.jikan.moe/v4/top/manga`);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         const result = await res.json();
-        setNewEpisodes(result.data);
+        setTopManga(result.data);
         console.log(result);
         
       } catch (error) {
         console.error('Failed to fetch episodes data:', error);
       }
      }
-     getNewEpisodes();
+     getTopManga();
   }, []);
 
   return (
     <div className="bg-zinc-950">
       <Navbar onSearch={handleSearch} />
       <main className="min-h-screen">
-        <HeroSection topAnime={topAnime} newEpisodes={newEpisodes}   />
-        <TrendingSection topAnime={topAnime} newEpisodes={newEpisodes} />
-        <GenresSection topAnime={topAnime} newEpisodes={newEpisodes} />
+        <HeroSection topAnime={topAnime} topManga={topManga}   />
+        <TrendingSection topAnime={topAnime} topManga={topManga} />
+        <GenresSection topAnime={topAnime} topManga={topManga} />
       </main>
       <Footer />
     </div>
