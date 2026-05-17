@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 export default function AnimeCard({topAnime}) {
+  const [like, setLike] = useState("🤍");
 
 return (
     <div className="group rounded-3xl overflow-hidden bg-zinc-900/70 border border-white/5 hover:border-purple-500/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
@@ -15,7 +18,11 @@ return (
             <span className="text-white text-sm font-semibold">{topAnime.score}</span>
           </div>
           <button className="p-2 rounded-full bg-black/70 hover:bg-gray-700/50 transition-colors hover:scale-110">
-            <span className="text-white">🤍</span>
+            <span
+            onClick={() => {  
+              setLike(like === "🤍" ? "❤️" : "🤍");
+            }}
+            className="text-white">{like}</span>
           </button>
         </div>
       </div>
