@@ -14,3 +14,7 @@
   width: max-content;
   animation: marquee 20s linear infinite;
 }
+
+html {
+  scroll-behavior: smooth;
+}

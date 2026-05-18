@@ -3,7 +3,11 @@ import AnimeCard from "./AnimeCard";
 export default function TrendingSection({ topManga }) {
   return (
     <section className="max-w-7xl mx-auto px-6 pb-24">
-      
+
+    <section id="manga" className="py-20 scroll-mt-20">
+      {/* content */}
+    </section>
+       
       {/* Enhanced Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
         <div>

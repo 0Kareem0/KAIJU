@@ -39,6 +39,15 @@ export default function Navbar({ onSearch }) {
             Trending
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
           </a>
+
+          <a
+            href="#manga"
+            className="hover:text-purple-400 transition-colors relative group"
+          >
+            Manga
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
+          </a>
+
           <a
             href="#"
             className="hover:text-purple-400 transition-colors relative group"
@@ -46,13 +55,7 @@ export default function Navbar({ onSearch }) {
             Genres
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
           </a>
-          <a
-            href="#"
-            className="hover:text-purple-400 transition-colors relative group"
-          >
-            Favorites
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
-          </a>
+
         </nav>
 
         <div className="flex items-center gap-4">
@@ -117,9 +120,9 @@ export default function Navbar({ onSearch }) {
             href="#"
             className="hover:text-purple-400 transition-colors py-2 border-b border-white/5"
           >
-            Favorites
+            Manga
           </a>
-          <button className="w-full px-5 py-3 rounded-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 transition-all font-medium shadow-lg shadow-purple-500/30 transform hover:scale-105">
+          <button className="w-full px-5 py-3 rounded-full bg-linear-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 transition-all font-medium shadow-lg shadow-purple-500/30 transform hover:scale-105">
             Sign In
           </button>
         </nav>
