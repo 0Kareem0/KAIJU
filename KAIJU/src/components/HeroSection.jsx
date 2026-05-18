@@ -3,6 +3,23 @@ import { useState, useEffect } from 'react';
 export default function HeroSection({ topAnime = [] }) {
   const safeTopAnime = Array.isArray(topAnime) ? topAnime : [];
   const [currentIndex, setCurrentIndex] = useState(0);
+ const names = [
+  "⚔️Jujutsu Kaisen",
+  "🏴‍☠️One Piece",
+  "🔥Chainsaw Man",
+  "🧝Frieren",
+  "👁️Oshi no Ko",
+  "⚡Solo Leveling",
+  "🩸Bleach TYBW",
+  "🛡️Attack on Titan",
+  "🌊Demon Slayer",
+  "🃏Re:ZERO",
+  "🎩Witch Hat Atelier",
+  "☄️Dandadan",
+  "👹Dorohedoro",
+  "🌀Naruto",
+  "🧪Dr. Stone",
+];
 
   const images = safeTopAnime
     .slice(0, 6)
@@ -108,6 +125,19 @@ export default function HeroSection({ topAnime = [] }) {
           )}
         </div>
       </div>
+      <section className=" mt-19 px-6 py-4 mx-auto relative overflow-hidden border-t border-white/10">
+      <div className="flex whitespace-nowrap animate-marquee gap-8 ">
+        {[...names, ...names].map((name, index) => (
+          <span
+            key={index}
+            className="text-gray-400 text-sm tracking-wide"
+          >
+            {name}
+          </span>
+        ))}
+      </div>
     </section>
+    </section>
+    
   );
 }
