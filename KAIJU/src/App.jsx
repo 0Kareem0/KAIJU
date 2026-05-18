@@ -15,6 +15,11 @@ export default function App() {
       setSearchQuery(newQuery)  
       
     }
+
+      useEffect(() => {
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+  }, []);
   
   useEffect(()=>{                                                                                         
     const getTopAnimeData = async()=>{                                                                            
