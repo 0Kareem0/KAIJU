@@ -117,7 +117,7 @@ export default function Navbar({ onSearch }) {
             Genres
           </a>
           <a
-            href="#"
+            href="#manga"
             className="hover:text-purple-400 transition-colors py-2 border-b border-white/5"
           >
             Manga
