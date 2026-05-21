@@ -29,8 +29,6 @@ export default function Navbar({ onSearch }) {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-xl bg-black/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-5 flex items-center justify-between gap-4">
-        
-        {/* Logo */}
         <div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-[0.3em] text-purple-400">
             KAIJU
@@ -41,7 +39,6 @@ export default function Navbar({ onSearch }) {
           </p>
         </div>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8 text-sm text-zinc-300">
           <a
             href="#"
@@ -76,10 +73,7 @@ export default function Navbar({ onSearch }) {
           </a>
         </nav>
 
-        {/* Search + Mobile Menu */}
         <div className="flex items-center gap-2 sm:gap-4 flex-1 md:flex-none justify-end">
-
-          {/* Search */}
           <form
             className="flex gap-2 w-full sm:w-auto max-w-xs sm:max-w-none"
             onSubmit={onSubmit}
@@ -92,7 +86,6 @@ export default function Navbar({ onSearch }) {
               placeholder="Search..."
             />
 
-            {/* Hidden on mobile */}
             <button
               className="hidden sm:block px-3 sm:px-5 py-2 rounded-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 transition-all font-medium shadow-lg shadow-purple-500/30 transform hover:scale-105 text-sm"
               type="submit"
@@ -101,7 +94,6 @@ export default function Navbar({ onSearch }) {
             </button>
           </form>
 
-          {/* Hamburger Menu - ONLY MOBILE */}
           <button
             className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
