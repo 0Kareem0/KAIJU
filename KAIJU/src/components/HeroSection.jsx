@@ -48,7 +48,7 @@ export default function HeroSection({ topAnime = [] }) {
           🔥 Trending Anime Platform
         </div>
 
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black leading-tight bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black leading-tight bg-linear-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent">
           Discover The World Of
           <span className="block text-purple-400">Anime</span>
         </h2>
@@ -58,7 +58,7 @@ export default function HeroSection({ topAnime = [] }) {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
-          <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white font-semibold transition-all transform hover:scale-105 text-sm sm:text-base">
+          <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-2xl bg-linear-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white font-semibold transition-all transform hover:scale-105 text-sm sm:text-base">
             Explore Now
           </button>
           <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-2xl border border-white/20 hover:border-purple-500/40 text-white hover:bg-purple-500/10 font-semibold transition-all transform hover:scale-105 text-sm sm:text-base">
