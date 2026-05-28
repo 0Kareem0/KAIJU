@@ -9,7 +9,7 @@ import Anime from "./pages/Anime";
 import Manga from "./pages/Manga";
 
 export default function App() {
-  console.log("4 days omg im fucking disappointed");
+  console.log("4 days omg im fucking disappointed, but ill back and never give up");
   
   
   const [topAnime, setTopAnime] = useState([]);
