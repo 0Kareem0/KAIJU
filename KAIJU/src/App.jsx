@@ -8,9 +8,7 @@ import { Routes, Route } from "react-router-dom";
 import Anime from "./pages/Anime";
 import Manga from "./pages/Manga";
 
-export default function App() {
-  console.log("4 days omg im fucking disappointed, but ill back and never give up");
-  
+export default function App() {  
   
   const [topAnime, setTopAnime] = useState([]);
   const [topManga, setTopManga] = useState([]);
