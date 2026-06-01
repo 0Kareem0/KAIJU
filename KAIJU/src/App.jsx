@@ -59,25 +59,25 @@ export default function App() {
   return (
 
     <div >
-      <Routes>
-        <Route path="/" element={
-          <div className="bg-zinc-950">
-            <Navbar onSearch={handleSearch} />
-            <main className="min-h-screen">
-              <HeroSection topAnime={topAnime} topManga={topManga} />
-              <TrendingSection topAnime={topAnime} topManga={topManga} />
-              <GenresSection topAnime={topAnime} topManga={topManga} />
-            </main>
-                <Footer />
-          </div>
-        }
-         />
-      </Routes>
+<Routes>
+  <Route
+    path="/"
+    element={
+      <div className="bg-zinc-950">
+        <Navbar onSearch={handleSearch} />
+        <main className="min-h-screen">
+          <HeroSection topAnime={topAnime} topManga={topManga} />
+          <TrendingSection topAnime={topAnime} topManga={topManga} />
+          <GenresSection topAnime={topAnime} topManga={topManga} />
+        </main>
+        <Footer />
+      </div>
+    }
+  />
 
-      <Routes>
-        <Route path="/anime" element={<Anime />} />
+  <Route path="/anime" element={<Anime />} />
   <Route path="/manga" element={<Manga topManga={topManga} />} />
-      </Routes>
+</Routes>
   
     </div>
   );

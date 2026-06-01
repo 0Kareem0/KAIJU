@@ -1,6 +1,5 @@
 export default function Manga({topManga}) {
   console.log(topManga);
-  
   return (
     <div className="min-h-screen bg-black text-white">
       {/* NAVBAR */}
@@ -63,10 +62,9 @@ export default function Manga({topManga}) {
 
         {/* CARDS GRID */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-6">
-
           {/* Cards */}
           {topManga.map((manga) => (
-          <div className="group rounded-3xl overflow-hidden bg-zinc-900/70 border border-white/5 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-2 flex flex-col">
+          <div key={manga.mal_id} className="group rounded-3xl overflow-hidden bg-zinc-900/70 border border-white/5 hover:border-purple-500/30 transition-all duration-300 hover:-translate-y-2 flex flex-col">
             <div className="relative h-72 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
               
