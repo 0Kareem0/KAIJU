@@ -145,7 +145,7 @@ export default function Navbar({ onSearch }) {
           </a>
 
           <a
-            href="#manga"
+            href="/manga"
             onClick={() => setIsMenuOpen(false)}
             className="hover:text-purple-400 transition-colors py-2 border-b border-white/5"
           >
