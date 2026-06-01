@@ -1,6 +1,6 @@
 import AnimeCard from "./AnimeCard";
 
-export default function TrendingSection({ topManga }) {
+export default function TrendingSection({ topAnime }) {
   return (
     <section className="max-w-7xl mx-auto px-6 pb-24">
       <section id="manga" className="py-20 scroll-mt-20"></section>
@@ -22,8 +22,8 @@ export default function TrendingSection({ topManga }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {topManga.slice(0, topManga.length).map((manga) => (
-          <AnimeCard key={manga.mal_id} item={manga} />
+        {topAnime.slice(0, topAnime.length).map((anime) => (
+          <AnimeCard key={anime.mal_id} item={anime} />
         ))}
       </div>
     </section>

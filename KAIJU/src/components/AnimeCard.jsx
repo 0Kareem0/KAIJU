@@ -10,8 +10,8 @@ export default function AnimeCard({ item }) {
   return (
     <div className="group rounded-3xl overflow-hidden bg-zinc-900/70 border border-white/5 hover:border-purple-500/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20 flex flex-col h-full">
       {/* Image Section */}
-      <div className="relative h-56 sm:h-64 md:h-72 overflow-hidden flex-shrink-0">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent z-10" />
+      <div className="relative h-56 sm:h-64 md:h-72 overflow-hidden shrink-0">
+        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent z-10" />
 
         <img
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"

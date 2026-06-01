@@ -57,7 +57,7 @@ export default function Navbar({ onSearch }) {
           </a>
 
           <a
-            href="#manga"
+            href="/manga"
             className="hover:text-purple-400 transition-colors relative group"
           >
             Manga
