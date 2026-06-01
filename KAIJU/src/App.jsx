@@ -76,7 +76,7 @@ export default function App() {
 
       <Routes>
         <Route path="/anime" element={<Anime />} />
-        <Route path="/manga" element={<Manga />} />
+  <Route path="/manga" element={<Manga topManga={topManga} />} />
       </Routes>
   
     </div>
