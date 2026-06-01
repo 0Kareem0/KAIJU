@@ -1,4 +1,6 @@
+import { useState } from "react";
 export default function Manga({topManga}) {
+const [liked, setLiked] = useState(false);
   console.log(topManga);
   return (
     <div className="min-h-screen bg-black text-white">
@@ -74,10 +76,26 @@ export default function Manga({topManga}) {
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
               />
 
-              <div className="absolute bottom-3 left-3 z-20 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1">
-                <span className="text-yellow-400">⭐</span>
-                <span className="text-xs font-semibold">{manga.score || "N/A"}</span>
-              </div>
+          <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center z-20 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300">
+          <div className="flex items-center gap-2 bg-black/70 px-3 py-1 rounded-full">
+            <span className="text-yellow-400 text-base sm:text-lg">⭐</span>
+            <span className="text-white text-xs sm:text-sm font-semibold">
+              {manga.score || "?"}
+            </span>
+          </div>
+          <button
+              onClick={(e) => {
+                e.stopPropagation();  
+                setLiked(!liked);
+            }}
+            className="p-2 sm:p-2.5 rounded-full bg-black/70 hover:bg-gray-700/80 transition-all hover:scale-110 active:scale-90"
+          >
+            <span className="text-xl sm:text-2xl transition-transform">
+              {liked ? "❤️" : "🤍"}
+            </span>
+          </button>
+        </div>
+
 
               <div className="absolute top-3 right-3 z-20 bg-purple-600/90 px-3 py-1 rounded-full text-[10px] font-semibold tracking-wide">
                 {manga.type}
