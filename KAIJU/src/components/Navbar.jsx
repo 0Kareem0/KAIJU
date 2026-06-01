@@ -31,7 +31,7 @@ export default function Navbar({ onSearch }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-5 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-[0.3em] text-purple-400">
-            KAIJU
+            <span className="text-white">K</span>AIJU
           </h1>
 
           <p className="text-[10px] sm:text-xs text-zinc-500 uppercase tracking-[0.25em] mt-1">
