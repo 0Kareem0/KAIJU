@@ -5,4 +5,4 @@ and it takes me to the trending section
 1- fix the mobile restriction
 2- make a new route for a specific anime or manga so when i search it 
 and click it it takes me there 
-3-make the search works 
+3-make the search works  
