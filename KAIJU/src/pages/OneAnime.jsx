@@ -1,9 +1,13 @@
-export default function OneAnime() {
+export default function OneAnime({topAnime}) {
+      const toHomePage = ()=>{
+    window.location.href = `/`;
+   } 
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
       {/* Back Button */}
-      <button className="fixed top-6 left-6 z-50 flex items-center gap-2 bg-black/70 hover:bg-black px-5 py-3 rounded-full text-sm font-medium transition-all">
-        ← Back to Home
+      <button onClick={toHomePage} className="fixed top-6 left-6 z-50 flex items-center gap-2 bg-black/70 hover:bg-black px-5 py-3 rounded-full text-sm font-medium transition-all">
+       <span className="pb-1">←</span>
+       <span>Back to Home</span>
       </button>
 
       {/* Hero Banner */}
@@ -15,7 +19,6 @@ export default function OneAnime() {
           <div className="flex flex-col md:flex-row gap-8 items-end">
             {/* Poster */}
             <div className="w-48 md:w-64 -mb-8 md:-mb-12 rounded-2xl overflow-hidden border-4 border-zinc-900 shadow-2xl bg-zinc-800 aspect-[2/3]" />
-
             {/* Info */}
             <div className="flex-1 pb-6">
               <div className="flex items-center gap-3 mb-4">
