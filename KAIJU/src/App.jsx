@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Anime from "./pages/Anime";
 import Manga from "./pages/Manga";
+import OneAnime from "./pages/OneAnime";
 
 export default function App() {  
   
@@ -79,6 +80,7 @@ export default function App() {
 
   <Route path="/anime" element={<Anime />} />
   <Route path="/manga" element={<Manga topManga={topManga} />} />
+  <Route path="/oneAnime" element={<OneAnime />} />
 </Routes>
   
     </div>
