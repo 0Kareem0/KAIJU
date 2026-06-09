@@ -15,7 +15,6 @@ export default function App() {
   const [topManga, setTopManga] = useState([]);
   // const [anime , setAnime] = useState("naruto");
   const [searchQuery, setSearchQuery] = useState("");
-  console.log("i was here");
   
 
   const handleSearch = (newQuery) => {
@@ -80,7 +79,7 @@ export default function App() {
 
   <Route path="/anime" element={<Anime />} />
   <Route path="/manga" element={<Manga topManga={topManga} />} />
-  <Route path="/oneAnime" element={<OneAnime topAnime={topAnime} />} />
+  <Route path="/oneAnime/:id" element={<OneAnime topAnime={topAnime} />} />
 </Routes>
   
     </div>

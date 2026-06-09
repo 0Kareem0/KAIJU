@@ -8,7 +8,7 @@ export default function AnimeCard({ item }) {
   const isManga = item.type === "Manga" || item.chapters !== undefined;
       
    const toAnimePage = ()=>{
-    window.location.href = `/oneAnime`;
+    window.location.href = `/oneAnime/${item.mal_id}`;
    } 
 
   return (

@@ -1,11 +1,13 @@
-export default function OneAnime({topAnime}) {
+export default function OneAnime({topAnime}) {  
       const toHomePage = ()=>{
-    window.location.href = `/`;
-   } 
+    window.location.href = `/`;    
+   }    
+   console.log(topAnime);
+   
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
       {/* Back Button */}
-      <button onClick={toHomePage} className="fixed top-6 left-6 z-50 flex items-center gap-2 bg-black/70 hover:bg-black px-5 py-3 rounded-full text-sm font-medium transition-all">
+      <button onClick={toHomePage} className="fixed top-6 left-6 z-50 flex items-center gap-2 bg-black/70 hover:translate-x-1 transition-all px-5 py-3 rounded-full text-sm font-medium">
        <span className="pb-1">←</span>
        <span>Back to Home</span>
       </button>
@@ -31,7 +33,7 @@ export default function OneAnime({topAnime}) {
               </div>
 
               <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-4">
-                Title
+               Title
               </h1>
 
               <div className="flex items-center gap-6 text-sm">

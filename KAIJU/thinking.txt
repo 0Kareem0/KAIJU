@@ -6,3 +6,6 @@ and it takes me to the trending section
 2- make a new route for a specific anime or manga so when i search it 
 and click it it takes me there 
 3-make the search works  
+___________________________
+now we need to make the data is the same as the anime we clicked 
+ofc we gonna use the id but how we need to think about it step by step 
