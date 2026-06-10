@@ -1,8 +1,13 @@
-export default function OneAnime({topAnime}) {  
-      const toHomePage = ()=>{
-    window.location.href = `/`;    
-   }    
-   console.log(topAnime);
+import { useParams } from "react-router-dom";
+
+export default function OneAnime({topAnime}) {
+  const { id } = useParams();
+  const toHomePage = ()=>{
+    window.location.href = `/`;
+  }
+
+  const anime = topAnime?.find(a => a.mal_id === parseInt(id));
+  console.log(anime);
    
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
@@ -14,34 +19,34 @@ export default function OneAnime({topAnime}) {
 
       {/* Hero Banner */}
       <div className="relative h-[500px] w-full">
-        <div className="w-full h-full bg-zinc-800" />
+        <img src={anime?.images?.jpg?.large_image_url} alt={anime?.title} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent" />
 
         <div className="absolute bottom-0 left-0 right-0 p-8 max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row gap-8 items-end">
             {/* Poster */}
-            <div className="w-48 md:w-64 -mb-8 md:-mb-12 rounded-2xl overflow-hidden border-4 border-zinc-900 shadow-2xl bg-zinc-800 aspect-[2/3]" />
+            <img src={anime?.images?.jpg?.large_image_url} alt={anime?.title} className="w-48 md:w-64 -mb-8 md:-mb-12 rounded-2xl overflow-hidden border-4 border-zinc-900 shadow-2xl aspect-[2/3] object-cover" />
             {/* Info */}
             <div className="flex-1 pb-6">
               <div className="flex items-center gap-3 mb-4">
                 <span className="bg-emerald-600 text-xs px-3 py-1 rounded-full font-medium">
-                  Status
+                  {anime?.status}
                 </span>
                 <span className="text-zinc-400 text-sm">
-                  Year
+                  {anime?.year}
                 </span>
               </div>
 
               <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-4">
-               Title
+                {anime?.title}
               </h1>
 
               <div className="flex items-center gap-6 text-sm">
                 <div className="flex items-center gap-2">
                   <span className="text-yellow-400">★</span>
-                  <span className="text-2xl font-semibold">Score</span>
+                  <span className="text-2xl font-semibold">{anime?.score}</span>
                 </div>
-                <div className="text-zinc-400">Type • Episodes</div>
+                <div className="text-zinc-400">{anime?.type} • {anime?.episodes} Episodes</div>
               </div>
             </div>
           </div>
@@ -64,7 +69,7 @@ export default function OneAnime({topAnime}) {
             <div>
               <h2 className="text-2xl font-bold mb-4">Synopsis</h2>
               <p className="text-zinc-300 leading-relaxed text-lg">
-                Description
+                {anime?.synopsis}
               </p>
             </div>
 
@@ -72,9 +77,11 @@ export default function OneAnime({topAnime}) {
             <div className="mt-10">
               <h3 className="text-xl font-semibold mb-4">Genres</h3>
               <div className="flex flex-wrap gap-3">
-                <span className="bg-zinc-900 px-5 py-2 rounded-full text-sm border border-zinc-700 hover:border-violet-500 transition-colors">
-                  Genre
-                </span>
+                {anime?.genres?.map((genre) => (
+                  <span key={genre.mal_id} className="bg-zinc-900 px-5 py-2 rounded-full text-sm border border-zinc-700 hover:border-violet-500 transition-colors">
+                    {genre.name}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
@@ -86,19 +93,19 @@ export default function OneAnime({topAnime}) {
               <div className="space-y-4 text-sm">
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Status</span>
-                  <span>Status</span>
+                  <span>{anime?.status}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Episodes</span>
-                  <span>Episodes</span>
+                  <span>{anime?.episodes}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Year</span>
-                  <span>Year</span>
+                  <span>{anime?.year}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Type</span>
-                  <span>Type</span>
+                  <span>{anime?.type}</span>
                 </div>
               </div>
             </div>
