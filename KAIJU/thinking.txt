@@ -9,3 +9,9 @@ and click it it takes me there
 ___________________________
 now we need to make the data is the same as the anime we clicked 
 ofc we gonna use the id but how we need to think about it step by step 
+_______________________________________________________________
+OneAnime.jsx
+today we have 2 things too do:
+1- fix the mobile restriction
+2-the background wallpaper is bad so we have to figure a solution 
+3-the episodes should be the same as the anime i clicked 

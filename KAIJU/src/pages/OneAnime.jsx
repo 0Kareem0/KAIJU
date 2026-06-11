@@ -1,135 +1,272 @@
 import { useParams } from "react-router-dom";
 
-export default function OneAnime({topAnime}) {
+export default function OneAnime({ topAnime }) {
   const { id } = useParams();
-  const toHomePage = ()=>{
-    window.location.href = `/`;
+
+  const anime = topAnime?.find(
+    (a) => a.mal_id === parseInt(id)
+  );
+
+  const toHomePage = () => {
+    window.location.href = "/";
+  };
+
+  if (!anime) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex justify-center items-center text-white text-xl">
+        Loading...
+      </div>
+    );
   }
 
-  const anime = topAnime?.find(a => a.mal_id === parseInt(id));
-  console.log(anime);
-   
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
-      {/* Back Button */}
-      <button onClick={toHomePage} className="fixed top-6 left-6 z-50 flex items-center gap-2 bg-black/70 hover:translate-x-1 transition-all px-5 py-3 rounded-full text-sm font-medium">
-       <span className="pb-1">←</span>
-       <span>Back to Home</span>
+
+      {/* BACK BUTTON */}
+      <button
+        onClick={toHomePage}
+        className="fixed top-4 left-4 z-50 bg-black/70 backdrop-blur-xl px-4 py-2 rounded-full hover:bg-black transition"
+      >
+        ← Back
       </button>
 
-      {/* Hero Banner */}
-      <div className="relative h-[500px] w-full">
-        <img src={anime?.images?.jpg?.large_image_url} alt={anime?.title} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent" />
+      {/* HERO */}
+      <section className="relative h-[450px] md:h-[550px] overflow-hidden">
 
-        <div className="absolute bottom-0 left-0 right-0 p-8 max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row gap-8 items-end">
-            {/* Poster */}
-            <img src={anime?.images?.jpg?.large_image_url} alt={anime?.title} className="w-48 md:w-64 -mb-8 md:-mb-12 rounded-2xl overflow-hidden border-4 border-zinc-900 shadow-2xl aspect-[2/3] object-cover" />
-            {/* Info */}
-            <div className="flex-1 pb-6">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="bg-emerald-600 text-xs px-3 py-1 rounded-full font-medium">
-                  {anime?.status}
+        <img
+          src={anime.images.jpg.large_image_url}
+          alt={anime.title}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-transparent" />
+
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-7xl px-5">
+
+          <div className="flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
+
+            {/* POSTER */}
+            <img
+              src={anime.images.jpg.large_image_url}
+              alt={anime.title}
+              className="
+              w-36
+              sm:w-44
+              md:w-60
+              rounded-3xl
+              border-4
+              border-zinc-900
+              shadow-2xl
+              object-cover
+              md:-mb-10
+              "
+            />
+
+            {/* INFO */}
+            <div className="pb-2 md:pb-10">
+
+              <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-4">
+
+                <span className="bg-emerald-600 px-4 py-1 rounded-full text-sm">
+                  {anime.status}
                 </span>
-                <span className="text-zinc-400 text-sm">
-                  {anime?.year}
-                </span>
+
+                {anime.year && (
+                  <span className="bg-zinc-800 px-4 py-1 rounded-full text-sm">
+                    {anime.year}
+                  </span>
+                )}
               </div>
 
-              <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-4">
-                {anime?.title}
+              <h1 className="text-3xl md:text-6xl font-bold mb-4">
+                {anime.title}
               </h1>
 
-              <div className="flex items-center gap-6 text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="text-yellow-400">★</span>
-                  <span className="text-2xl font-semibold">{anime?.score}</span>
-                </div>
-                <div className="text-zinc-400">{anime?.type} • {anime?.episodes} Episodes</div>
+              <div className="flex flex-wrap justify-center md:justify-start gap-5 text-zinc-300">
+
+                <span>
+                  ⭐ {anime.score}
+                </span>
+
+                <span>
+                  {anime.type}
+                </span>
+
+                <span>
+                  {anime.episodes} Episodes
+                </span>
+
               </div>
+
             </div>
+
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {/* Main Content */}
+      </section>
+
+      {/* MAIN */}
+      <div className="max-w-7xl mx-auto px-4 pt-14 pb-14">
+
+        <div className="grid lg:grid-cols-3 gap-8">
+
+          {/* LEFT */}
           <div className="lg:col-span-2">
-            <div className="flex gap-3 mb-8">
-              <button className="flex-1 bg-violet-600 hover:bg-violet-500 transition-all py-4 rounded-2xl font-semibold text-lg flex items-center justify-center gap-3">
+
+            {/* BUTTONS */}
+            <div className="flex gap-4 mb-8">
+
+              <button className="flex-1 bg-violet-600 hover:bg-violet-500 transition py-4 rounded-2xl font-semibold">
                 ▶ Watch Now
               </button>
-              <button className="px-8 bg-zinc-800 hover:bg-zinc-700 transition-all rounded-2xl">
+
+              <button className="bg-zinc-800 hover:bg-zinc-700 px-6 rounded-2xl">
                 +
               </button>
+
             </div>
 
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Synopsis</h2>
-              <p className="text-zinc-300 leading-relaxed text-lg">
-                {anime?.synopsis}
+            {/* SYNOPSIS */}
+            <div className="bg-zinc-900/60 backdrop-blur-xl p-7 rounded-3xl mb-8">
+
+              <h2 className="text-2xl font-bold mb-5">
+                Synopsis
+              </h2>
+
+              <p className="text-zinc-300 leading-8">
+                {anime.synopsis}
               </p>
+
             </div>
 
-            {/* Genres */}
-            <div className="mt-10">
-              <h3 className="text-xl font-semibold mb-4">Genres</h3>
-              <div className="flex flex-wrap gap-3">
-                {anime?.genres?.map((genre) => (
-                  <span key={genre.mal_id} className="bg-zinc-900 px-5 py-2 rounded-full text-sm border border-zinc-700 hover:border-violet-500 transition-colors">
+            {/* GENRES */}
+            <div className="bg-zinc-900/60 backdrop-blur-xl p-7 rounded-3xl">
+
+              <h2 className="text-2xl font-bold mb-5">
+                Genres
+              </h2>
+
+              <div className="flex gap-3 overflow-x-auto">
+
+                {anime.genres.map((genre) => (
+                  <span
+                    key={genre.mal_id}
+                    className="
+                    whitespace-nowrap
+                    px-5
+                    py-2
+                    rounded-full
+                    bg-zinc-800
+                    border
+                    border-zinc-700
+                    hover:border-violet-500
+                    transition
+                    "
+                  >
                     {genre.name}
                   </span>
                 ))}
+
               </div>
+
             </div>
+
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-8">
-            <div className="bg-zinc-900 rounded-3xl p-6">
-              <h3 className="font-semibold text-lg mb-5">Details</h3>
-              <div className="space-y-4 text-sm">
+          {/* RIGHT */}
+          <div className="space-y-8 lg:sticky lg:top-8 h-fit">
+
+            {/* DETAILS */}
+            <div className="bg-zinc-900/60 backdrop-blur-xl rounded-3xl p-7">
+
+              <h2 className="text-xl font-bold mb-6">
+                Details
+              </h2>
+
+              <div className="space-y-5">
+
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Status</span>
-                  <span>{anime?.status}</span>
+                  <span>{anime.status}</span>
                 </div>
+
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Episodes</span>
-                  <span>{anime?.episodes}</span>
+                  <span>{anime.episodes}</span>
                 </div>
+
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Year</span>
-                  <span>{anime?.year}</span>
+                  <span>{anime.year || "Unknown"}</span>
                 </div>
+
                 <div className="flex justify-between">
                   <span className="text-zinc-400">Type</span>
-                  <span>{anime?.type}</span>
+                  <span>{anime.type}</span>
                 </div>
+
               </div>
+
             </div>
 
-            {/* Episodes List */}
-            <div className="bg-zinc-900 rounded-3xl p-6">
-              <h3 className="font-semibold text-lg mb-5 flex items-center gap-2">
+            {/* EPISODES */}
+            <div className="bg-zinc-900/60 backdrop-blur-xl rounded-3xl p-7">
+
+              <h2 className="text-xl font-bold mb-5">
                 Episodes
-              </h3>
-              <div className="max-h-[420px] overflow-y-auto space-y-2 pr-2 custom-scrollbar">
-                <div className="flex items-center justify-between bg-zinc-950 hover:bg-zinc-800 p-4 rounded-2xl cursor-pointer transition group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 bg-violet-600/20 text-violet-400 rounded-xl flex items-center justify-center text-sm font-medium group-hover:bg-violet-600 group-hover:text-white transition">
-                      1
+              </h2>
+
+              <div className="max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent space-y-3">
+
+                {Array.from(
+                  { length: anime.episodes || 1 },
+                  (_, i) => (
+                    <div
+                      key={i}
+                      className="
+                      flex
+                      justify-between
+                      items-center
+                      bg-zinc-950
+                      hover:bg-zinc-800
+                      transition
+                      p-4
+                      rounded-2xl
+                      cursor-pointer              
+                      "
+                    >
+                      <div className="flex items-center gap-4">
+
+                        <div className="
+                        w-10 h-10
+                        rounded-xl
+                        bg-violet-600/20
+                        text-violet-400
+                        flex justify-center items-center
+                        ">
+                          {i + 1}
+                        </div>
+
+                        Episode {i + 1}
+
+                      </div>
+
+                      ▶
+
                     </div>
-                    <span>Episode 1</span>
-                  </div>
-                  <span className="text-zinc-500 group-hover:text-white transition">▶</span>
-                </div>
+                  )
+                )}
+
               </div>
+
             </div>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
   );
 }
