@@ -23,17 +23,17 @@ export default function OneAnime({ topAnime }) {
       {/* BACK BUTTON */}
       <button
         onClick={toHomePage}
-        className="fixed top-4 left-4 z-50 bg-black/70 px-4 py-2 rounded-full backdrop-blur-xl"
+        className="fixed top-4 left-4 z-50 bg-black/70 px-4 py-2 rounded-full backdrop-blur-xl transition-all duration-300 hover:bg-black/90 hover:scale-105"
       >
         ← Back
       </button>
 
       {/* HERO */}
-      <section className="relative h-[420px] sm:h-[500px] md:h-[600px]">
+      <section className="relative h-105 sm:h-125 md:h-150 mr-3.5">
 
         <img
-          src={anime.images.jpg.large_image_url}
-          alt={anime.title}
+          src="/allAnime.png"  
+          alt="all Anime"
           className="absolute inset-0 w-full h-full object-cover"
         />
 
