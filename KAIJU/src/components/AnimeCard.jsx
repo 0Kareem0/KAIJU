@@ -14,7 +14,7 @@ export default function AnimeCard({ item }) {
   };
 
   return (
-    <div
+    <div id="trending"
       onClick={toAnimePage}
       className="group rounded-3xl overflow-hidden bg-zinc-900/70 border border-white/5 hover:border-purple-500/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20 flex flex-col h-full cursor-pointer"
     >

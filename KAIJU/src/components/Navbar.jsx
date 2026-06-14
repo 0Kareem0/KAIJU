@@ -51,24 +51,24 @@ export default function Navbar({ onSearch }) {
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
           </Link>
 
-          <Link
-            to="/trending"
-            className="hover:text-purple-400 transition-colors relative group"
+          <a 
+            href="#trending"
+            className="hover:text-purple-400 transition-colors relative group cursor-pointer"
           >
             Trending
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
-          </Link>
+          </a>
 
           <Link
             to="/manga"
-            className="hover:text-purple-400 transition-colors relative group"
+            className="hover:text-purple-400 transition-colors relative group cursor-pointer"
           >
             Manga
           </Link>
 
           <Link
-            to="/genres"
-            className="hover:text-purple-400 transition-colors relative group"
+            to="/"
+            className="hover:text-purple-400 transition-colors relative group cursor-pointer"
           >
             Genres
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>

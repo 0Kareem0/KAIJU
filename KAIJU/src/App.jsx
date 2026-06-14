@@ -9,6 +9,7 @@ import Anime from "./pages/Anime";
 import Manga from "./pages/Manga";
 import OneAnime from "./pages/OneAnime";
 import ScrollToTop from "./components/ScrollToTop";
+import OneManga from "./pages/OneManga";
 
 export default function App() {
   const [topAnime, setTopAnime] = useState([]);
@@ -82,6 +83,8 @@ export default function App() {
           path="/oneAnime/:id"
           element={<OneAnime topAnime={topAnime} />}
         />
+        <Route path="/oneManga/:id" 
+        element={<OneManga topManga={topManga} />} />
       </Routes>
     </div>
   );

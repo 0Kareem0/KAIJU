@@ -1,35 +1,52 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Manga({ topManga }) {
-const [likedIds, setLikedIds] = useState(new Set());
+  const [likedIds, setLikedIds] = useState(new Set());
+  const navigate = useNavigate();
 
   const toggleLike = (id) => {
-    setLikedIds(prev => {
+    setLikedIds((prev) => {
       const newSet = new Set(prev);
+
       if (newSet.has(id)) {
         newSet.delete(id);
       } else {
         newSet.add(id);
       }
+
       return newSet;
     });
   };
+
+  const toMangaPage = (item) => {
+    navigate(`/oneManga/${item.mal_id}`);
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* NAV */}
       <nav className="sticky top-0 z-50 backdrop-blur-xl bg-black/70 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <Link to="/">
-          <h1 className="text-2xl sm:text-3xl font-black tracking-wide cursor-pointer">
-            <span className="text-purple-500">K</span>AIJU
-          </h1>
+            <h1 className="text-2xl sm:text-3xl font-black tracking-wide cursor-pointer">
+              <span className="text-purple-500">K</span>AIJU
+            </h1>
           </Link>
+
           <div className="flex flex-wrap justify-center gap-4 text-xs sm:text-sm md:text-base">
-            <a href="/" className="hover:text-purple-400 transition cursor-pointer">Home</a>
-            <a className="hover:text-purple-400 transition cursor-pointer">Trending</a>
-            <a className="hover:text-purple-400 transition cursor-pointer">Genres</a>
-            <a className="hover:text-purple-400 transition cursor-pointer">Top Rated</a>
+            <a href="/" className="hover:text-purple-400 transition">
+              Home
+            </a>
+            <a className="hover:text-purple-400 transition cursor-pointer">
+              Trending
+            </a>
+            <a className="hover:text-purple-400 transition cursor-pointer">
+              Genres
+            </a>
+            <a className="hover:text-purple-400 transition cursor-pointer">
+              Top Rated
+            </a>
           </div>
         </div>
       </nav>
@@ -48,20 +65,9 @@ const [likedIds, setLikedIds] = useState(new Set());
           </h1>
 
           <p className="text-zinc-400 text-sm sm:text-base md:text-lg max-w-xl mx-auto">
-            Explore epic stories, legendary characters, and hidden gems from the manga world.
+            Explore epic stories, legendary characters, and hidden gems from
+            the manga world.
           </p>
-
-          {/* SEARCH */}
-          <div className="mt-6 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center bg-zinc-900 border border-white/10 rounded-2xl sm:rounded-3xl overflow-hidden max-w-xl mx-auto">
-            <input
-              type="text"
-              placeholder="Search manga..."
-              className="w-full bg-transparent px-4 sm:px-6 py-3 sm:py-4 outline-none placeholder:text-zinc-500 text-sm sm:text-base"
-            />
-            <button className="bg-purple-600 hover:bg-purple-700 transition px-6 sm:px-10 py-3 sm:py-4 font-semibold">
-              Search
-            </button>
-          </div>
         </div>
       </section>
 
@@ -71,13 +77,6 @@ const [likedIds, setLikedIds] = useState(new Set());
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black">
             Trending Now
           </h2>
-
-          <a
-            href="#"
-            className="text-purple-400 hover:text-purple-300 transition text-xs sm:text-sm flex items-center gap-1"
-          >
-            View All <span>→</span>
-          </a>
         </div>
 
         {/* CARDS */}
@@ -85,7 +84,8 @@ const [likedIds, setLikedIds] = useState(new Set());
           {topManga.map((manga) => (
             <div
               key={manga.mal_id}
-              className="group rounded-2xl sm:rounded-3xl overflow-hidden bg-zinc-900/70 border border-white/5 hover:border-purple-500/30 transition flex flex-col"
+              onClick={() => toMangaPage(manga)}
+              className="group rounded-2xl sm:rounded-3xl overflow-hidden bg-zinc-900/70 border border-white/5 hover:border-purple-500/30 transition flex flex-col cursor-pointer"
             >
               <div className="relative h-44 sm:h-64 md:h-72 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
@@ -106,16 +106,16 @@ const [likedIds, setLikedIds] = useState(new Set());
                   </div>
 
                   <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleLike(manga.mal_id);
-                      }}
-                      className="p-2 rounded-full bg-black/70 hover:bg-gray-700/80 active:scale-90 transition-all"
-                    >
-                      <span className="text-xl transition-transform">
-                        {likedIds.has(manga.mal_id) ? "❤️" : "🤍"}
-                      </span>
-                    </button>
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleLike(manga.mal_id);
+                    }}
+                    className="p-2 rounded-full bg-black/70 hover:bg-gray-700/80 active:scale-90 transition-all"
+                  >
+                    <span className="text-xl">
+                      {likedIds.has(manga.mal_id) ? "❤️" : "🤍"}
+                    </span>
+                  </button>
                 </div>
 
                 <div className="absolute top-2 right-2 z-20 bg-purple-600/90 px-2 py-1 rounded-full text-[9px] sm:text-[10px]">
