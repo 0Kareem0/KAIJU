@@ -8,10 +8,10 @@ export default function AnimeCard({ item }) {
   if (!item) return null;
 
   const isManga = item.type === "Manga" || item.chapters !== undefined;
-      
-   const toAnimePage = ()=>{
+
+  const toAnimePage = () => {
     navigate(`/oneAnime/${item.mal_id}`);
-   } 
+  };
 
   return (
     <div

@@ -19,7 +19,6 @@ export default function OneAnime({ topAnime }) {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white overflow-x-hidden">
-
       {/* BACK BUTTON */}
       <button
         onClick={toHomePage}
@@ -30,9 +29,8 @@ export default function OneAnime({ topAnime }) {
 
       {/* HERO */}
       <section className="relative h-105 sm:h-125 md:h-150 mr-3.5">
-
         <img
-          src="/allAnime.png"  
+          src="/allAnime.png"
           alt="all Anime"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -41,10 +39,8 @@ export default function OneAnime({ topAnime }) {
 
         <div className="absolute bottom-6 sm:bottom-10 inset-x-0 px-4">
           <div className="max-w-6xl mx-auto">
-
             {/* MOBILE + DESKTOP (clean unified layout) */}
             <div className="flex flex-col md:flex-row md:items-end gap-6 items-center text-center md:text-left">
-
               <img
                 src={anime.images.jpg.large_image_url}
                 alt={anime.title}
@@ -52,7 +48,6 @@ export default function OneAnime({ topAnime }) {
               />
 
               <div className="space-y-3 w-full">
-
                 <div className="flex flex-wrap justify-center md:justify-start gap-2">
                   <span className="bg-emerald-600 px-3 py-1 rounded-full text-xs sm:text-sm">
                     {anime.status}
@@ -74,24 +69,17 @@ export default function OneAnime({ topAnime }) {
                   <span>{anime.type}</span>
                   <span>{anime.episodes} Episodes</span>
                 </div>
-
               </div>
-
             </div>
-
           </div>
         </div>
-
       </section>
 
       {/* CONTENT */}
       <div className="max-w-6xl mx-auto px-4 py-10 sm:py-12">
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-
           {/* LEFT */}
           <div className="lg:col-span-2 space-y-6">
-
             <div className="flex gap-3">
               <button className="flex-1 bg-violet-600 hover:bg-violet-500 transition py-3 sm:py-4 rounded-2xl font-semibold">
                 ▶ Watch Now
@@ -104,9 +92,7 @@ export default function OneAnime({ topAnime }) {
 
             {/* SYNOPSIS */}
             <div className="bg-zinc-900/70 p-5 sm:p-7 rounded-3xl">
-              <h2 className="text-xl sm:text-2xl font-bold mb-4">
-                Synopsis
-              </h2>
+              <h2 className="text-xl sm:text-2xl font-bold mb-4">Synopsis</h2>
 
               <p className="text-zinc-300 leading-7 sm:leading-8 text-sm sm:text-base break-words">
                 {anime.synopsis}
@@ -115,9 +101,7 @@ export default function OneAnime({ topAnime }) {
 
             {/* GENRES */}
             <div className="bg-zinc-900/70 p-5 sm:p-7 rounded-3xl">
-              <h2 className="text-xl sm:text-2xl font-bold mb-4">
-                Genres
-              </h2>
+              <h2 className="text-xl sm:text-2xl font-bold mb-4">Genres</h2>
 
               <div className="flex flex-wrap gap-2">
                 {anime.genres.map((genre) => (
@@ -130,21 +114,15 @@ export default function OneAnime({ topAnime }) {
                 ))}
               </div>
             </div>
-
           </div>
 
           {/* RIGHT */}
           <div className="space-y-6">
-
             {/* DETAILS */}
             <div className="bg-zinc-900/70 rounded-3xl p-5 sm:p-7">
-
-              <h2 className="text-lg sm:text-xl font-bold mb-5">
-                Details
-              </h2>
+              <h2 className="text-lg sm:text-xl font-bold mb-5">Details</h2>
 
               <div className="space-y-4 text-sm sm:text-base">
-
                 <div className="flex justify-between gap-4">
                   <span className="text-zinc-400">Status</span>
                   <span className="text-right">{anime.status}</span>
@@ -164,19 +142,14 @@ export default function OneAnime({ topAnime }) {
                   <span className="text-zinc-400">Type</span>
                   <span>{anime.type}</span>
                 </div>
-
               </div>
             </div>
 
             {/* EPISODES */}
             <div className="bg-zinc-900/70 rounded-3xl p-5 sm:p-7">
-
-              <h2 className="text-lg sm:text-xl font-bold mb-4">
-                Episodes
-              </h2>
+              <h2 className="text-lg sm:text-xl font-bold mb-4">Episodes</h2>
 
               <div className="scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent space-y-3 max-h-75 sm:max-h-100 overflow-y-auto pr-1">
-
                 {Array.from({ length: anime.episodes || 1 }, (_, i) => (
                   <div
                     key={i}
@@ -195,17 +168,11 @@ export default function OneAnime({ topAnime }) {
                     <span className="text-sm">▶</span>
                   </div>
                 ))}
-
               </div>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }

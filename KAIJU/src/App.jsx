@@ -8,14 +8,13 @@ import { Routes, Route } from "react-router-dom";
 import Anime from "./pages/Anime";
 import Manga from "./pages/Manga";
 import OneAnime from "./pages/OneAnime";
+import ScrollToTop from "./components/ScrollToTop";
 
-export default function App() {  
-  
+export default function App() {
   const [topAnime, setTopAnime] = useState([]);
   const [topManga, setTopManga] = useState([]);
   // const [anime , setAnime] = useState("naruto");
   const [searchQuery, setSearchQuery] = useState("");
-  
 
   const handleSearch = (newQuery) => {
     setSearchQuery(newQuery);
@@ -59,29 +58,31 @@ export default function App() {
   }, []);
 
   return (
+    <div>
+      <ScrollToTop />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="bg-zinc-950">
+              <Navbar onSearch={handleSearch} />
+              <main className="min-h-screen">
+                <HeroSection topAnime={topAnime} topManga={topManga} />
+                <TrendingSection topAnime={topAnime} topManga={topManga} />
+                <GenresSection topAnime={topAnime} topManga={topManga} />
+              </main>
+              <Footer />
+            </div>
+          }
+        />
 
-    <div >
-<Routes>
-  <Route
-    path="/"
-    element={
-      <div className="bg-zinc-950">
-        <Navbar onSearch={handleSearch} />
-        <main className="min-h-screen">
-          <HeroSection topAnime={topAnime} topManga={topManga} />
-          <TrendingSection topAnime={topAnime} topManga={topManga} />
-          <GenresSection topAnime={topAnime} topManga={topManga} />
-        </main>
-        <Footer />
-      </div>
-    }
-  />
-
-  <Route path="/anime" element={<Anime />} />
-  <Route path="/manga" element={<Manga topManga={topManga} />} />
-  <Route path="/oneAnime/:id" element={<OneAnime topAnime={topAnime} />} />
-</Routes>
-  
+        <Route path="/anime" element={<Anime />} />
+        <Route path="/manga" element={<Manga topManga={topManga} />} />
+        <Route
+          path="/oneAnime/:id"
+          element={<OneAnime topAnime={topAnime} />}
+        />
+      </Routes>
     </div>
   );
 }
