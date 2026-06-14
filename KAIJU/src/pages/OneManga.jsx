@@ -1,12 +1,14 @@
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function OneManga({ topManga }) {
   const { id } = useParams();
+  const navigate = useNavigate()
 
   const manga = topManga?.find((a) => a.mal_id === parseInt(id));
 
-  const toHomePage = () => {
-    window.location.href = "/";
+  const backButton = () => {
+    navigate("/manga");
   };
 
   if (!manga) {
@@ -21,7 +23,7 @@ export default function OneManga({ topManga }) {
     <div className="min-h-screen bg-zinc-950 text-white overflow-x-hidden">
       {/* BACK BUTTON */}
       <button
-        onClick={toHomePage}
+        onClick={backButton}
         className="fixed top-4 left-4 z-50 bg-black/70 px-4 py-2 rounded-full backdrop-blur-xl transition-all duration-300 hover:bg-black/90 hover:scale-105"
       >
         ← Back
