@@ -1,14 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AnimeCard({ item }) {
   const [liked, setLiked] = useState(false);
+  const navigate = useNavigate();
 
   if (!item) return null;
 
   const isManga = item.type === "Manga" || item.chapters !== undefined;
       
    const toAnimePage = ()=>{
-    window.location.href = `/oneAnime/${item.mal_id}`;
+    navigate(`/oneAnime/${item.mal_id}`);
    } 
 
   return (
