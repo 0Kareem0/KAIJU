@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function Navbar({ onSearch }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -56,13 +57,12 @@ export default function Navbar({ onSearch }) {
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
           </a>
 
-          <a
-            href="/manga"
+          <Link
+            to="/manga"
             className="hover:text-purple-400 transition-colors relative group"
           >
             Manga
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
-          </a>
+          </Link>
 
           <a
             href="#"
@@ -144,13 +144,13 @@ export default function Navbar({ onSearch }) {
             Trending
           </a>
 
-          <a
-            href="/manga"
+          <Link
+            to="/manga"
             onClick={() => setIsMenuOpen(false)}
             className="hover:text-purple-400 transition-colors py-2 border-b border-white/5"
           >
             Manga
-          </a>
+          </Link>
 
           <a
             href="#"
