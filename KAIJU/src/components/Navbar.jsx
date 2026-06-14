@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+
 export default function Navbar({ onSearch }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -31,31 +32,32 @@ export default function Navbar({ onSearch }) {
     <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-xl bg-black/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-5 flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-[0.3em] text-purple-400">
+          <h1 
+            className="text-2xl sm:text-3xl font-black tracking-[0.3em] text-purple-400 cursor-pointer"
+          >
             <span className="text-white">K</span>AIJU
           </h1>
-
           <p className="text-[10px] sm:text-xs text-zinc-500 uppercase tracking-[0.25em] mt-1">
             Anime Platform
           </p>
         </div>
 
         <nav className="hidden md:flex items-center gap-8 text-sm text-zinc-300">
-          <a
-            href="#"
+          <Link 
+            to="/"
             className="hover:text-purple-400 transition-colors relative group"
           >
             Home
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
-          </a>
+          </Link>
 
-          <a
-            href="#trending"
+          <Link
+            to="/trending"
             className="hover:text-purple-400 transition-colors relative group"
           >
             Trending
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
-          </a>
+          </Link>
 
           <Link
             to="/manga"
@@ -64,13 +66,13 @@ export default function Navbar({ onSearch }) {
             Manga
           </Link>
 
-          <a
-            href="#"
+          <Link
+            to="/genres"
             className="hover:text-purple-400 transition-colors relative group"
           >
             Genres
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
-          </a>
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-4 flex-1 md:flex-none justify-end">

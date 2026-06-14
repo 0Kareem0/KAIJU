@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Manga({ topManga }) {
 const [likedIds, setLikedIds] = useState(new Set());
@@ -19,15 +20,16 @@ const [likedIds, setLikedIds] = useState(new Set());
       {/* NAV */}
       <nav className="sticky top-0 z-50 backdrop-blur-xl bg-black/70 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <h1 className="text-2xl sm:text-3xl font-black tracking-wide">
+          <Link to="/">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-wide cursor-pointer">
             <span className="text-purple-500">K</span>AIJU
           </h1>
-
+          </Link>
           <div className="flex flex-wrap justify-center gap-4 text-xs sm:text-sm md:text-base">
-            <a href="/" className="hover:text-purple-400 transition">Home</a>
-            <a className="hover:text-purple-400 transition">Trending</a>
-            <a className="hover:text-purple-400 transition">Genres</a>
-            <a className="hover:text-purple-400 transition">Top Rated</a>
+            <a href="/" className="hover:text-purple-400 transition cursor-pointer">Home</a>
+            <a className="hover:text-purple-400 transition cursor-pointer">Trending</a>
+            <a className="hover:text-purple-400 transition cursor-pointer">Genres</a>
+            <a className="hover:text-purple-400 transition cursor-pointer">Top Rated</a>
           </div>
         </div>
       </nav>
