@@ -52,7 +52,7 @@ export default function Navbar({ onSearch }) {
           </Link>
 
           <a 
-            href="trending"
+            href="#trending"
             className="hover:text-purple-400 transition-colors relative group cursor-pointer"
           >
             Trending
