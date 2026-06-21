@@ -16,6 +16,8 @@ export default function App() {
   const [topManga, setTopManga] = useState([]);
   // const [anime , setAnime] = useState("naruto");
   const [searchQuery, setSearchQuery] = useState("");
+  console.log("this is the end 😓");
+  
 
   const handleSearch = (newQuery) => {
     setSearchQuery(newQuery);
