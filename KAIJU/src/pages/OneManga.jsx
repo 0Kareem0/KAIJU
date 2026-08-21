@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -5,10 +6,35 @@ import Footer from "../components/Footer";
 export default function OneManga({ topManga = [] }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [mangaData, setMangaData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const manga = topManga?.find((a) => a.mal_id === parseInt(id));
+  useEffect(() => {
+    const found = topManga?.find((a) => a.mal_id === parseInt(id));
+    if (found) {
+      setMangaData(found);
+      setLoading(false);
+    } else {
+      const fetchManga = async () => {
+        try {
+          setLoading(true);
+          const res = await fetch(`https://api.jikan.moe/v4/manga/${id}`);
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          const result = await res.json();
+          setMangaData(result.data);
+        } catch (error) {
+          console.error("Failed to fetch manga details:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchManga();
+    }
+  }, [id, topManga]);
 
-  if (!manga) {
+  const manga = mangaData;
+
+  if (loading || !manga) {
     return (
       <div className="min-h-screen bg-zinc-950 flex flex-col justify-center items-center text-white p-4">
         <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-4"></div>
@@ -216,4 +242,5 @@ export default function OneManga({ topManga = [] }) {
     </div>
   );
 }
+
 

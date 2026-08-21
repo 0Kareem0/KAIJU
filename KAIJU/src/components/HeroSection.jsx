@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function HeroSection({ topAnime = [] }) {
   const safeTopAnime = Array.isArray(topAnime) ? topAnime : [];
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
 
   const names = [
     "⚔️ Jujutsu Kaisen",
@@ -34,11 +36,17 @@ export default function HeroSection({ topAnime = [] }) {
     if (images.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 3500);
+    }, 4000);
     return () => clearInterval(interval);
   }, [images.length]);
 
   const currentAnime = safeTopAnime[currentIndex] || {};
+
+  const handleHeroClick = () => {
+    if (currentAnime.mal_id) {
+      navigate(`/oneAnime/${currentAnime.mal_id}`);
+    }
+  };
 
   return (
     <div className="relative overflow-hidden pt-4 sm:pt-8 pb-8 sm:pb-16">
@@ -78,7 +86,10 @@ export default function HeroSection({ topAnime = [] }) {
         </div>
 
         {/* Right Side Carousel */}
-        <div className="relative group h-[320px] sm:h-[420px] md:h-[480px] lg:h-[540px] flex items-center">
+        <div
+          onClick={handleHeroClick}
+          className="relative group h-[340px] sm:h-[420px] md:h-[480px] lg:h-[540px] flex items-center cursor-pointer"
+        >
           <div className="absolute inset-0 bg-gradient-to-br from-purple-600/30 via-indigo-600/20 to-pink-500/10 rounded-[2.5rem] blur-3xl group-hover:blur-[4rem] transition-all duration-500 z-0" />
 
           <div className="relative w-full h-full rounded-2xl sm:rounded-3xl overflow-hidden border border-white/15 shadow-2xl shadow-purple-500/20 bg-zinc-950">
@@ -88,7 +99,7 @@ export default function HeroSection({ topAnime = [] }) {
                   key={index}
                   src={img}
                   alt={safeTopAnime[index]?.title || "Featured"}
-                  className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ${
+                  className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-1000 ${
                     index === currentIndex
                       ? "opacity-100 scale-100"
                       : "opacity-0 scale-105"
@@ -101,46 +112,43 @@ export default function HeroSection({ topAnime = [] }) {
               </div>
             )}
 
-            {/* Gradient Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent z-10" />
+            {/* Subtle Gradient Overlay at bottom only so top 60% of image is 100% visible */}
+            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-transparent z-10 pointer-events-none" />
 
-            {/* Featured Info */}
+            {/* Featured Info Overlay (Compact) */}
             {images.length > 0 && currentAnime.title && (
-              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 z-20">
-                <div className="flex items-center gap-2 mb-2 sm:mb-3">
-                  <span className="px-2.5 sm:px-3 py-1 bg-purple-600 text-white text-[10px] sm:text-xs font-black uppercase tracking-wider rounded-md shadow-md">
+              <div className="absolute bottom-0 left-0 right-0 p-3.5 sm:p-5 md:p-6 z-20">
+                <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
+                  <span className="px-2.5 py-0.5 bg-purple-600 text-white text-[10px] sm:text-xs font-black uppercase tracking-wider rounded-md shadow-md">
                     TRENDING #{currentIndex + 1}
                   </span>
                   {currentAnime.score && (
-                    <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md border border-white/10 text-yellow-400 text-[10px] sm:text-xs font-bold rounded-md">
+                    <span className="px-2 py-0.5 bg-black/60 backdrop-blur-md border border-white/10 text-yellow-400 text-[10px] sm:text-xs font-bold rounded-md">
                       ⭐ {currentAnime.score}
                     </span>
                   )}
                 </div>
 
-                <h3 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-black text-white leading-tight drop-shadow-lg line-clamp-2">
+                <h3 className="text-sm sm:text-lg md:text-xl font-bold text-white leading-tight drop-shadow-md line-clamp-1 sm:line-clamp-2">
                   {currentAnime.title}
                 </h3>
-
-                {currentAnime.synopsis && (
-                  <p className="text-zinc-300 mt-2 line-clamp-2 text-xs sm:text-sm leading-relaxed hidden sm:block">
-                    {currentAnime.synopsis}
-                  </p>
-                )}
               </div>
             )}
 
             {/* Carousel Indicators */}
             {images.length > 1 && (
-              <div className="absolute top-4 right-4 flex gap-1.5 z-30 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+              <div className="absolute top-3.5 right-3.5 flex gap-1.5 z-30 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
                 {images.map((_, idx) => (
                   <button
                     key={idx}
                     aria-label={`Go to slide ${idx + 1}`}
-                    onClick={() => setCurrentIndex(idx)}
-                    className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentIndex(idx);
+                    }}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
                       idx === currentIndex
-                        ? "w-6 bg-purple-400"
+                        ? "w-5 bg-purple-400"
                         : "w-1.5 bg-white/40 hover:bg-white"
                     }`}
                   />
@@ -170,4 +178,5 @@ export default function HeroSection({ topAnime = [] }) {
     </div>
   );
 }
+
 

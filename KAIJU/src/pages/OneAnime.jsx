@@ -1,14 +1,40 @@
-import { useParams, useNavigate } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 export default function OneAnime({ topAnime = [] }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [animeData, setAnimeData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const anime = topAnime?.find((a) => a.mal_id === parseInt(id));
+  useEffect(() => {
+    const found = topAnime?.find((a) => a.mal_id === parseInt(id));
+    if (found) {
+      setAnimeData(found);
+      setLoading(false);
+    } else {
+      const fetchAnime = async () => {
+        try {
+          setLoading(true);
+          const res = await fetch(`https://api.jikan.moe/v4/anime/${id}`);
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          const result = await res.json();
+          setAnimeData(result.data);
+        } catch (error) {
+          console.error("Failed to fetch anime details:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchAnime();
+    }
+  }, [id, topAnime]);
 
-  if (!anime) {
+  const anime = animeData;
+
+  if (loading || !anime) {
     return (
       <div className="min-h-screen bg-zinc-950 flex flex-col justify-center items-center text-white p-4">
         <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-4"></div>
@@ -223,4 +249,5 @@ export default function OneAnime({ topAnime = [] }) {
     </div>
   );
 }
+
 
