@@ -1,13 +1,17 @@
-export default function GenreButton({ title }) {
+export default function GenreButton({ title, icon, active, onClick }) {
   return (
-    <button className="group relative px-6 py-3 rounded-2xl bg-black/40 border border-white/10 hover:border-purple-500/40 hover:bg-purple-500/10 transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/20 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-500/0 to-purple-500/0 group-hover:from-purple-500/10 group-hover:via-purple-500/5 group-hover:to-purple-500/0 transition-all duration-300"></div>
-      <span className="relative z-10 font-medium text-white group-hover:text-purple-300 transition-colors duration-300">
+    <button
+      onClick={onClick}
+      className={`group relative px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl border transition-all duration-300 transform active:scale-95 flex items-center gap-2 shrink-0 ${
+        active
+          ? "bg-gradient-to-r from-purple-600 to-indigo-600 border-purple-400 text-white shadow-lg shadow-purple-500/30 scale-105"
+          : "bg-zinc-900/90 border-white/10 text-zinc-300 hover:border-purple-500/40 hover:text-white hover:bg-zinc-800"
+      }`}
+    >
+      {icon && <span className="text-base sm:text-lg">{icon}</span>}
+      <span className="font-semibold text-xs sm:text-sm whitespace-nowrap">
         {title}
       </span>
-      <div className="absolute top-0 left-0 w-full h-full rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl transform -translate-x-1/2 -translate-y-1/2"></div>
-      </div>
     </button>
   );
 }

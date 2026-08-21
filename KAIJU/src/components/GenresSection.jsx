@@ -3,6 +3,20 @@ import { useState, useEffect } from "react";
 
 export default function GenresSection() {
   const [showButton, setShowButton] = useState(false);
+  const [selectedGenre, setSelectedGenre] = useState("All");
+
+  const genres = [
+    { title: "All", icon: "✨" },
+    { title: "Action", icon: "⚔️" },
+    { title: "Fantasy", icon: "🔮" },
+    { title: "Drama", icon: "🎭" },
+    { title: "Comedy", icon: "😂" },
+    { title: "Romance", icon: "💖" },
+    { title: "Sci-Fi", icon: "🚀" },
+    { title: "Shonen", icon: "🔥" },
+    { title: "Mystery", icon: "🔍" },
+    { title: "Slice of Life", icon: "🍃" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -10,7 +24,6 @@ export default function GenresSection() {
     };
 
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -20,34 +33,50 @@ export default function GenresSection() {
       behavior: "smooth",
     });
   };
+
   return (
-    <section className="max-w-7xl mx-auto px-6 pb-24">
-      <div className="rounded-[2rem] border border-white/10 bg-zinc-900/60 p-8 md:p-12 backdrop-blur-xl">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+    <section id="genres" className="max-w-7xl mx-auto px-4 sm:px-6 pb-20 sm:pb-28 scroll-mt-20">
+      <div className="rounded-2xl sm:rounded-3xl border border-white/10 bg-zinc-900/60 p-5 sm:p-8 md:p-10 backdrop-blur-xl shadow-2xl">
+        <div className="flex flex-col gap-6">
           <div>
-            <h2 className="text-3xl font-bold text-white">Browse By Genre</h2>
-            <p className="text-zinc-400 mt-2 max-w-xl">
-              Genre buttons structure.
+            <span className="px-3 py-1 bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs rounded-full font-medium">
+              🏷️ Categories
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-white mt-2">
+              Browse By Genre
+            </h2>
+            <p className="text-zinc-400 text-xs sm:text-sm mt-1 max-w-xl">
+              Filter anime and manga titles by your favorite story categories.
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-4">
-            <GenreButton title="Action" />
-            <GenreButton title="Fantasy" />
-            <GenreButton title="Drama" />
-            <GenreButton title="Comedy" />
+          {/* Swipeable Horizontal Genre Pills on Mobile */}
+          <div className="flex items-center gap-2.5 sm:gap-3 overflow-x-auto no-scrollbar pb-2 pt-1 -mx-2 px-2 scroll-smooth">
+            {genres.map((genre) => (
+              <GenreButton
+                key={genre.title}
+                title={genre.title}
+                icon={genre.icon}
+                active={selectedGenre === genre.title}
+                onClick={() => setSelectedGenre(genre.title)}
+              />
+            ))}
           </div>
         </div>
       </div>
-          <button
-      onClick={scrollToTop}
-      className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-500/30 transition-all duration-300 ${
-        showButton
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-10 pointer-events-none"
-      }`}
-    >
-    </button>      
+
+      {/* Floating Scroll to Top Arrow Button */}
+      <button
+        aria-label="Scroll to top"
+        onClick={scrollToTop}
+        className={`fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-40 w-11 sm:w-12 h-11 sm:h-12 rounded-full bg-purple-600 hover:bg-purple-500 text-white flex items-center justify-center shadow-lg shadow-purple-500/30 backdrop-blur-md border border-white/20 transition-all duration-300 active:scale-95 ${
+          showButton
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-10 pointer-events-none"
+        }`}
+      >
+        <span className="text-lg sm:text-xl font-bold">↑</span>
+      </button>
     </section>
   );
 }

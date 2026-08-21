@@ -1,173 +1,209 @@
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
-export default function OneManga({ topManga }) {
+export default function OneManga({ topManga = [] }) {
   const { id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const manga = topManga?.find((a) => a.mal_id === parseInt(id));
 
-  const backButton = () => {
-    navigate("/manga");
-  };
-
   if (!manga) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex justify-center items-center text-white">
-        Loading...
+      <div className="min-h-screen bg-zinc-950 flex flex-col justify-center items-center text-white p-4">
+        <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p className="text-zinc-400 text-sm">Loading Manga details...</p>
+        <button
+          onClick={() => navigate("/manga")}
+          className="mt-6 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-xl text-xs text-white"
+        >
+          ← Back to Manga List
+        </button>
       </div>
     );
   }
 
+  const bgImage =
+    manga.images?.jpg?.large_image_url ||
+    manga.images?.jpg?.image_url ||
+    "/allAnime.png";
+
   return (
-    <div className="min-h-screen bg-zinc-950 text-white overflow-x-hidden">
-      {/* BACK BUTTON */}
-      <button
-        onClick={backButton}
-        className="fixed top-4 left-4 z-50 bg-black/70 px-4 py-2 rounded-full backdrop-blur-xl transition-all duration-300 hover:bg-black/90 hover:scale-105"
-      >
-        ← Back
-      </button>
+    <div className="min-h-screen bg-zinc-950 text-white flex flex-col overflow-x-hidden">
+      <Navbar />
 
-      {/* HERO */}
-      <section className="relative h-105 sm:h-125 md:h-150">
-        <img
-          src="/allAnime.png"
-          alt="all Anime"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+      {/* HERO COVER BANNER */}
+      <section className="relative min-h-[380px] sm:min-h-[460px] flex items-end">
+        {/* Background Blur Image */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <img
+            src={bgImage}
+            alt={manga.title}
+            className="w-full h-full object-cover blur-md opacity-30 scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent" />
+        </div>
 
-        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent" />
+        {/* Back Button */}
+        <button
+          onClick={() => navigate("/manga")}
+          className="absolute top-4 left-4 z-20 bg-black/60 hover:bg-black/80 backdrop-blur-md border border-white/10 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white flex items-center gap-1.5 transition-all active:scale-95 shadow-lg"
+        >
+          <span>←</span> Back
+        </button>
 
-        <div className="absolute bottom-6 sm:bottom-10 inset-x-0 px-4">
-          <div className="max-w-6xl mx-auto">
-            {/* MOBILE + DESKTOP (clean unified layout) */}
-            <div className="flex flex-col md:flex-row md:items-end gap-6 items-center text-center md:text-left">
-              <img
-                src={manga.images.jpg.large_image_url}
-                alt={manga.title}
-                className="w-32 sm:w-40 md:w-56 rounded-2xl border-4 border-zinc-900 shadow-2xl"
-              />
+        {/* Hero Content */}
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pb-6 sm:pb-10 pt-16">
+          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-5 sm:gap-8 text-center sm:text-left">
+            <img
+              src={manga.images?.jpg?.large_image_url || manga.images?.jpg?.image_url}
+              alt={manga.title}
+              className="w-36 sm:w-48 md:w-56 rounded-2xl border-2 border-purple-500/30 shadow-2xl shadow-purple-500/20 shrink-0 aspect-[3/4] object-cover"
+            />
 
-              <div className="space-y-3 w-full">
-                <div className="flex flex-wrap justify-center md:justify-start gap-2">
-                  <span className="bg-emerald-600 px-3 py-1 rounded-full text-xs sm:text-sm">
-                    {manga.status}
+            <div className="space-y-3 w-full">
+              <div className="flex flex-wrap justify-center sm:justify-start gap-2">
+                <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-0.5 rounded-full text-xs font-semibold">
+                  {manga.status || "Publishing"}
+                </span>
+
+                {manga.year && (
+                  <span className="bg-zinc-800/80 border border-white/10 px-3 py-0.5 rounded-full text-xs text-zinc-300">
+                    {manga.year}
                   </span>
+                )}
 
-                  {manga.year && (
-                    <span className="bg-zinc-800 px-3 py-1 rounded-full text-xs sm:text-sm">
-                      {manga.year}
-                    </span>
-                  )}
-                </div>
+                {manga.type && (
+                  <span className="bg-purple-600/30 text-purple-300 border border-purple-500/30 px-3 py-0.5 rounded-full text-xs font-bold uppercase">
+                    {manga.type}
+                  </span>
+                )}
+              </div>
 
-                <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold break-words px-2 md:px-0">
-                  {manga.title}
-                </h1>
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black leading-tight bg-gradient-to-r from-white to-zinc-300 bg-clip-text text-transparent">
+                {manga.title}
+              </h1>
 
-                <div className="flex flex-wrap justify-center md:justify-start gap-4 text-zinc-300 text-sm sm:text-base">
-                  <span>⭐ {manga.score}</span>
-                  <span>{manga.type}</span>
-                  <span>{manga.chapters} Chapters</span>
-                </div>
+              <div className="flex flex-wrap justify-center sm:justify-start items-center gap-4 text-zinc-300 text-xs sm:text-sm pt-1">
+                {manga.score && (
+                  <span className="flex items-center gap-1 font-bold text-yellow-400 bg-black/40 px-2.5 py-1 rounded-lg border border-white/10">
+                    ⭐ {manga.score}
+                  </span>
+                )}
+                <span>{manga.chapters ? `${manga.chapters} Chapters` : "Ongoing"}</span>
+                {manga.volumes && <span>{manga.volumes} Volumes</span>}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CONTENT */}
-      <div className="max-w-6xl mx-auto px-4 py-10 sm:py-12">
+      {/* DETAIL CONTENT */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 w-full flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-          {/* LEFT */}
+          {/* MAIN LEFT COLUMN */}
           <div className="lg:col-span-2 space-y-6">
+            {/* ACTION BUTTONS */}
             <div className="flex gap-3">
-              <button className="flex-1 bg-violet-600 hover:bg-violet-500 transition py-3 sm:py-4 rounded-2xl font-semibold">
-                ▶ Read Now
+              <button className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3.5 sm:py-4 rounded-2xl shadow-lg shadow-purple-500/25 transition-all active:scale-[0.98] text-sm sm:text-base flex items-center justify-center gap-2">
+                <span>📖 Read Chapter 1</span>
               </button>
 
-              <button className="w-12 sm:w-14 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">
+              <button
+                aria-label="Add to Library"
+                className="w-12 sm:w-14 bg-zinc-900 border border-white/10 hover:border-purple-500/40 rounded-2xl flex items-center justify-center font-bold text-xl hover:bg-zinc-800 transition-all active:scale-95"
+              >
                 +
               </button>
             </div>
 
             {/* SYNOPSIS */}
-            <div className="bg-zinc-900/70 p-5 sm:p-7 rounded-3xl">
-              <h2 className="text-xl sm:text-2xl font-bold mb-4">Synopsis</h2>
+            <div className="bg-zinc-900/60 border border-white/10 p-5 sm:p-7 rounded-2xl sm:rounded-3xl backdrop-blur-xl">
+              <h2 className="text-lg sm:text-xl font-bold text-white mb-3 flex items-center gap-2">
+                <span>📖</span> Synopsis
+              </h2>
 
-              <p className="text-zinc-300 leading-7 sm:leading-8 text-sm sm:text-base break-words">
-                {manga.synopsis}
+              <p className="text-zinc-300 leading-relaxed text-xs sm:text-sm md:text-base">
+                {manga.synopsis || "No synopsis available for this manga title."}
               </p>
             </div>
 
             {/* GENRES */}
-            <div className="bg-zinc-900/70 p-5 sm:p-7 rounded-3xl">
-              <h2 className="text-xl sm:text-2xl font-bold mb-4">Genres</h2>
+            {manga.genres?.length > 0 && (
+              <div className="bg-zinc-900/60 border border-white/10 p-5 sm:p-7 rounded-2xl sm:rounded-3xl backdrop-blur-xl">
+                <h2 className="text-lg sm:text-xl font-bold text-white mb-3 flex items-center gap-2">
+                  <span>🏷️</span> Genres
+                </h2>
 
-              <div className="flex flex-wrap gap-2">
-                {manga.genres.map((genre) => (
-                  <span
-                    key={genre.mal_id}
-                    className="px-4 py-1 bg-zinc-800 rounded-full text-sm border border-zinc-700"
-                  >
-                    {genre.name}
-                  </span>
-                ))}
+                <div className="flex flex-wrap gap-2">
+                  {manga.genres.map((genre) => (
+                    <span
+                      key={genre.mal_id}
+                      className="px-3.5 py-1.5 bg-zinc-800/80 hover:bg-purple-600/20 hover:text-purple-300 text-zinc-300 text-xs sm:text-sm font-medium rounded-full border border-white/10 transition-colors"
+                    >
+                      {genre.name}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
-          {/* RIGHT */}
+          {/* RIGHT SIDEBAR */}
           <div className="space-y-6">
-            {/* DETAILS */}
-            <div className="bg-zinc-900/70 rounded-3xl p-5 sm:p-7">
-              <h2 className="text-lg sm:text-xl font-bold mb-5">Details</h2>
+            {/* DETAILS METADATA */}
+            <div className="bg-zinc-900/60 border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-7 backdrop-blur-xl">
+              <h2 className="text-base sm:text-lg font-bold text-white mb-4 border-b border-white/10 pb-2">
+                Manga Info
+              </h2>
 
-              <div className="space-y-4 text-sm sm:text-base">
-                <div className="flex justify-between gap-4">
+              <div className="space-y-3.5 text-xs sm:text-sm">
+                <div className="flex justify-between items-center">
                   <span className="text-zinc-400">Status</span>
-                  <span className="text-right">{manga.status}</span>
+                  <span className="text-emerald-400 font-semibold">{manga.status}</span>
                 </div>
 
-                <div className="flex justify-between gap-4">
-                  <span className="text-zinc-400">Chapters</span>
-                  <span>{manga.chapters}</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-zinc-400">Total Chapters</span>
+                  <span className="font-semibold">{manga.chapters || "Ongoing"}</span>
                 </div>
 
-                <div className="flex justify-between gap-4">
-                  <span className="text-zinc-400">Year</span>
-                  <span>{manga.year || "Unknown"}</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-zinc-400">Total Volumes</span>
+                  <span className="font-semibold">{manga.volumes || "N/A"}</span>
                 </div>
 
-                <div className="flex justify-between gap-4">
+                <div className="flex justify-between items-center">
                   <span className="text-zinc-400">Type</span>
-                  <span>{manga.type}</span>
+                  <span className="font-semibold">{manga.type}</span>
                 </div>
               </div>
             </div>
 
-            {/* CHAPTERS */}
-            <div className="bg-zinc-900/70 rounded-3xl p-5 sm:p-7">
-              <h2 className="text-lg sm:text-xl font-bold mb-4">Chapters</h2>
+            {/* CHAPTER LIST */}
+            <div className="bg-zinc-900/60 border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-7 backdrop-blur-xl">
+              <h2 className="text-base sm:text-lg font-bold text-white mb-3">
+                Chapters
+              </h2>
 
-              <div className="scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent space-y-3 max-h-75 sm:max-h-100 overflow-y-auto pr-1">
-                {Array.from({ length: manga.chapters || 1 }, (_, i) => (
+              <div className="no-scrollbar space-y-2 max-h-72 sm:max-h-96 overflow-y-auto pr-1">
+                {Array.from({ length: Math.min(manga.chapters || 20, 30) }, (_, i) => (
                   <div
                     key={i}
-                    className="bg-zinc-950 hover:bg-zinc-800 transition rounded-2xl p-3 sm:p-4 flex justify-between items-center"
+                    className="bg-zinc-950/80 hover:bg-purple-600/20 border border-white/5 hover:border-purple-500/30 transition-all rounded-xl p-3 flex justify-between items-center cursor-pointer group active:scale-[0.98]"
                   >
-                    <div className="flex items-center gap-3 sm:gap-4">
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-violet-600/20 text-violet-400 rounded-xl flex items-center justify-center">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-purple-600/20 text-purple-400 font-bold text-xs flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors">
                         {i + 1}
                       </div>
-
-                      <span className="text-sm sm:text-base">
+                      <span className="text-xs sm:text-sm font-medium text-zinc-200 group-hover:text-white">
                         Chapter {i + 1}
                       </span>
                     </div>
 
-                    <span className="text-sm">▶</span>
+                    <span className="text-xs text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                      Read →
+                    </span>
                   </div>
                 ))}
               </div>
@@ -175,6 +211,9 @@ export default function OneManga({ topManga }) {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }
+
