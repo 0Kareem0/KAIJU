@@ -14,15 +14,43 @@ import OneManga from "./pages/OneManga";
 export default function App() {
   const [topAnime, setTopAnime] = useState([]);
   const [topManga, setTopManga] = useState([]);
-  // const [anime , setAnime] = useState("naruto");
+  const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  console.log("this is the end 😓");
-  
+  const [isSearching, setIsSearching] = useState(false);
 
-  const handleSearch = (newQuery) => {
-    setSearchQuery(newQuery);
+  const handleSearch = async (query) => {
+    if (!query.trim()) {
+      setSearchQuery("");
+      setSearchResults([]);
+      return;
+    }
+
+    const trimmed = query.trim();
+    setSearchQuery(trimmed);
+    setIsSearching(true);
+
+    try {
+      const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(trimmed)}`);
+      if (res.ok) {
+        const result = await res.json();
+        setSearchResults(result.data || []);
+      }
+    } catch (error) {
+      console.error("Search failed:", error);
+    } finally {
+      setIsSearching(false);
+      // Smooth scroll to trending/search results section
+      const target = document.getElementById("trending");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
 
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    setSearchResults([]);
+  };
 
   useEffect(() => {
     const getTopAnimeData = async () => {
@@ -32,7 +60,7 @@ export default function App() {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         const result = await res.json();
-        setTopAnime(result.data);
+        setTopAnime(result.data || []);
       } catch (error) {
         console.error("Failed to fetch anime data:", error);
       }
@@ -48,7 +76,7 @@ export default function App() {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         const result = await res.json();
-        setTopManga(result.data);
+        setTopManga(result.data || []);
       } catch (error) {
         console.error("Failed to fetch episodes data:", error);
       }
@@ -67,8 +95,14 @@ export default function App() {
               <Navbar onSearch={handleSearch} />
               <main className="min-h-screen">
                 <HeroSection topAnime={topAnime} topManga={topManga} />
-                <TrendingSection topAnime={topAnime} topManga={topManga} />
-                <GenresSection topAnime={topAnime} topManga={topManga} />
+                <TrendingSection
+                  topAnime={topAnime}
+                  searchResults={searchResults}
+                  searchQuery={searchQuery}
+                  isSearching={isSearching}
+                  onClearSearch={handleClearSearch}
+                />
+                <GenresSection topAnime={topAnime} topManga={topManga} onSelectGenre={handleSearch} />
               </main>
               <Footer />
             </div>
@@ -81,9 +115,12 @@ export default function App() {
           path="/oneAnime/:id"
           element={<OneAnime topAnime={topAnime} />}
         />
-        <Route path="/oneManga/:id" 
-        element={<OneManga topManga={topManga} />} />
+        <Route
+          path="/oneManga/:id"
+          element={<OneManga topManga={topManga} />}
+        />
       </Routes>
     </div>
   );
 }
+
