@@ -72,7 +72,7 @@ export default function OneManga({ topManga = [] }) {
 
         {/* Back Button */}
         <button
-          onClick={() => navigate("/manga")}
+          onClick={() => navigate(-1)}
           className="absolute top-4 left-4 z-20 bg-black/60 hover:bg-black/80 backdrop-blur-md border border-white/10 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white flex items-center gap-1.5 transition-all active:scale-95 shadow-lg"
         >
           <span>←</span> Back
