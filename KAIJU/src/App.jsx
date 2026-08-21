@@ -4,7 +4,7 @@ import TrendingSection from "./components/TrendingSection";
 import GenresSection from "./components/GenresSection";
 import Footer from "./components/Footer";
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Anime from "./pages/Anime";
 import Manga from "./pages/Manga";
 import OneAnime from "./pages/OneAnime";
@@ -17,9 +17,10 @@ export default function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const navigate = useNavigate();
 
   const handleSearch = async (query) => {
-    if (!query.trim()) {
+    if (!query || !query.trim()) {
       setSearchQuery("");
       setSearchResults([]);
       return;
@@ -28,6 +29,10 @@ export default function App() {
     const trimmed = query.trim();
     setSearchQuery(trimmed);
     setIsSearching(true);
+
+    if (window.location.pathname !== "/") {
+      navigate("/");
+    }
 
     try {
       const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(trimmed)}`);
@@ -39,11 +44,12 @@ export default function App() {
       console.error("Search failed:", error);
     } finally {
       setIsSearching(false);
-      // Smooth scroll to trending/search results section
-      const target = document.getElementById("trending");
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
-      }
+      setTimeout(() => {
+        const target = document.getElementById("trending");
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 150);
     }
   };
 
@@ -113,14 +119,15 @@ export default function App() {
         <Route path="/manga" element={<Manga topManga={topManga} />} />
         <Route
           path="/oneAnime/:id"
-          element={<OneAnime topAnime={topAnime} />}
+          element={<OneAnime topAnime={topAnime} onSearch={handleSearch} />}
         />
         <Route
           path="/oneManga/:id"
-          element={<OneManga topManga={topManga} />}
+          element={<OneManga topManga={topManga} onSearch={handleSearch} />}
         />
       </Routes>
     </div>
   );
 }
+
 

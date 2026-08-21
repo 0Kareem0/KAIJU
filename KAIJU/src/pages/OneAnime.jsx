@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-export default function OneAnime({ topAnime = [] }) {
+export default function OneAnime({ topAnime = [], onSearch }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [animeData, setAnimeData] = useState(null);
@@ -56,7 +56,7 @@ export default function OneAnime({ topAnime = [] }) {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col overflow-x-hidden">
-      <Navbar />
+      <Navbar onSearch={onSearch} />
 
       {/* HERO COVER BANNER */}
       <section className="relative min-h-[380px] sm:min-h-[460px] flex items-end">

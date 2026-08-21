@@ -10,9 +10,13 @@ export default function Navbar({ onSearch }) {
     e.preventDefault();
     if (inputValue.trim()) {
       if (onSearch) onSearch(inputValue.trim());
-      setInputValue("");
       setIsMenuOpen(false);
     }
+  };
+
+  const handleClearInput = () => {
+    setInputValue("");
+    if (onSearch) onSearch("");
   };
 
   // Close mobile menu automatically on desktop resize
@@ -90,17 +94,28 @@ export default function Navbar({ onSearch }) {
           {/* SEARCH & MENU TOGGLE */}
           <div className="flex items-center gap-2 sm:gap-3 flex-1 md:flex-none justify-end">
             <form
-              className="flex gap-2 w-full sm:w-auto max-w-[200px] sm:max-w-none"
+              className="flex gap-2 w-full sm:w-auto max-w-[220px] sm:max-w-none"
               onSubmit={onSubmit}
             >
               <div className="relative w-full sm:w-64">
                 <input
-                  className="w-full px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full bg-zinc-900/90 border border-white/10 text-white placeholder-zinc-500 text-xs sm:text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all pr-8"
+                  className="w-full px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full bg-zinc-900/90 border border-white/10 text-white placeholder-zinc-500 text-xs sm:text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all pr-14"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   type="text"
                   placeholder="Search anime, manga..."
                 />
+                
+                {inputValue ? (
+                  <button
+                    type="button"
+                    onClick={handleClearInput}
+                    className="absolute right-8 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition-colors text-xs p-1"
+                  >
+                    ✖
+                  </button>
+                ) : null}
+
                 <button
                   type="submit"
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition-colors"
