@@ -4,10 +4,11 @@ import Footer from "../components/Footer";
 import AnimeCard from "../components/AnimeCard";
 import GenresSection from "../components/GenresSection";
 import { matchesGenreFilter, matchesSearchQuery } from "../utils/genreFilter";
+import { FALLBACK_TOP_MANGA } from "../utils/fallbackData";
 
 export default function Manga({ topManga = [] }) {
-  const [mangaData, setMangaData] = useState(topManga || []);
-  const [loading, setLoading] = useState(topManga?.length === 0);
+  const initialData = topManga && topManga.length > 0 ? topManga : FALLBACK_TOP_MANGA;
+  const [mangaData, setMangaData] = useState(initialData);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("All");
@@ -19,39 +20,20 @@ export default function Manga({ topManga = [] }) {
 
     if (topManga && topManga.length > 0) {
       setMangaData(topManga);
-      setLoading(false);
       return;
     }
 
     const fetchTopManga = async () => {
-      setLoading(true);
-      let retries = 3;
-      let delay = 1000;
-
-      while (retries > 0) {
-        try {
-          const res = await fetch(`https://api.jikan.moe/v4/top/manga`);
-          if (res.status === 429) {
-            await new Promise((r) => setTimeout(r, delay));
-            delay *= 1.5;
-            retries--;
-            continue;
-          }
-          if (!res.ok) throw new Error(`HTTP status ${res.status}`);
+      try {
+        const res = await fetch(`https://api.jikan.moe/v4/top/manga`);
+        if (res.ok) {
           const result = await res.json();
-          if (isMounted) {
-            setMangaData(result.data || []);
-            setLoading(false);
-          }
-          return;
-        } catch (err) {
-          retries--;
-          if (retries === 0 && isMounted) {
-            setLoading(false);
-          } else {
-            await new Promise((r) => setTimeout(r, delay));
+          if (isMounted && result.data?.length > 0) {
+            setMangaData(result.data);
           }
         }
+      } catch (err) {
+        console.error("Manga fetch error:", err);
       }
     };
 
@@ -192,12 +174,7 @@ export default function Manga({ topManga = [] }) {
           )}
         </div>
 
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin shadow-[0_0_20px_rgba(168,85,247,0.4)]"></div>
-            <p className="text-zinc-300 font-medium text-sm">Loading Manga titles...</p>
-          </div>
-        ) : isSearching && displayedManga.length === 0 ? (
+        {isSearching && displayedManga.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin shadow-[0_0_20px_rgba(168,85,247,0.4)]"></div>
             <p className="text-zinc-300 font-medium text-sm">Searching manga for "{searchQuery}"...</p>

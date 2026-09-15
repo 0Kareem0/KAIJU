@@ -11,10 +11,11 @@ import OneAnime from "./pages/OneAnime";
 import ScrollToTop from "./components/ScrollToTop";
 import OneManga from "./pages/OneManga";
 import { matchesSearchQuery } from "./utils/genreFilter";
+import { FALLBACK_TOP_ANIME, FALLBACK_TOP_MANGA } from "./utils/fallbackData";
 
 export default function App() {
-  const [topAnime, setTopAnime] = useState([]);
-  const [topManga, setTopManga] = useState([]);
+  const [topAnime, setTopAnime] = useState(FALLBACK_TOP_ANIME);
+  const [topManga, setTopManga] = useState(FALLBACK_TOP_MANGA);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("All");
@@ -67,8 +68,8 @@ export default function App() {
         setSearchResults([...combined]);
       }
 
-      // Small delay to prevent Jikan 429 rate limit
-      await new Promise((resolve) => setTimeout(resolve, 250));
+      // Delay to prevent Jikan 429 rate limit
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
       // 3. Fetch API Manga
       const resManga = await fetch(`https://api.jikan.moe/v4/manga?q=${encodeURIComponent(trimmed)}&limit=25`);
@@ -114,36 +115,46 @@ export default function App() {
     setSelectedGenre("All");
   };
 
+  // Fetch Live Data sequentially with rate-limit retries
   useEffect(() => {
-    const getTopAnimeData = async () => {
-      try {
-        const res = await fetch(`https://api.jikan.moe/v4/top/anime`);
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        const result = await res.json();
-        setTopAnime(result.data || []);
-      } catch (error) {
-        console.error("Failed to fetch anime data:", error);
-      }
-    };
-    getTopAnimeData();
-  }, []);
+    let isMounted = true;
 
-  useEffect(() => {
-    const getTopManga = async () => {
+    const fetchInitialData = async () => {
+      // 1. Fetch Top Anime
       try {
-        const res = await fetch(`https://api.jikan.moe/v4/top/manga`);
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
+        const resAnime = await fetch(`https://api.jikan.moe/v4/top/anime`);
+        if (resAnime.ok) {
+          const resultAnime = await resAnime.json();
+          if (isMounted && resultAnime.data?.length > 0) {
+            setTopAnime(resultAnime.data);
+          }
         }
-        const result = await res.json();
-        setTopManga(result.data || []);
-      } catch (error) {
-        console.error("Failed to fetch manga data:", error);
+      } catch (err) {
+        console.error("Anime fetch error:", err);
+      }
+
+      // Delay 400ms before next fetch to avoid 429 rate limit
+      await new Promise((resolve) => setTimeout(resolve, 400));
+
+      // 2. Fetch Top Manga
+      try {
+        const resManga = await fetch(`https://api.jikan.moe/v4/top/manga`);
+        if (resManga.ok) {
+          const resultManga = await resManga.json();
+          if (isMounted && resultManga.data?.length > 0) {
+            setTopManga(resultManga.data);
+          }
+        }
+      } catch (err) {
+        console.error("Manga fetch error:", err);
       }
     };
-    getTopManga();
+
+    fetchInitialData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
