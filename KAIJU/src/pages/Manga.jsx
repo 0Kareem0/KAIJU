@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AnimeCard from "../components/AnimeCard";
@@ -6,11 +6,61 @@ import GenresSection from "../components/GenresSection";
 import { matchesGenreFilter, matchesSearchQuery } from "../utils/genreFilter";
 
 export default function Manga({ topManga = [] }) {
-  const mangaList = Array.isArray(topManga) ? topManga : [];
+  const [mangaData, setMangaData] = useState(topManga || []);
+  const [loading, setLoading] = useState(topManga?.length === 0);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("All");
   const [isSearching, setIsSearching] = useState(false);
+
+  // Sync or fetch top manga if props empty
+  useEffect(() => {
+    let isMounted = true;
+
+    if (topManga && topManga.length > 0) {
+      setMangaData(topManga);
+      setLoading(false);
+      return;
+    }
+
+    const fetchTopManga = async () => {
+      setLoading(true);
+      let retries = 3;
+      let delay = 1000;
+
+      while (retries > 0) {
+        try {
+          const res = await fetch(`https://api.jikan.moe/v4/top/manga`);
+          if (res.status === 429) {
+            await new Promise((r) => setTimeout(r, delay));
+            delay *= 1.5;
+            retries--;
+            continue;
+          }
+          if (!res.ok) throw new Error(`HTTP status ${res.status}`);
+          const result = await res.json();
+          if (isMounted) {
+            setMangaData(result.data || []);
+            setLoading(false);
+          }
+          return;
+        } catch (err) {
+          retries--;
+          if (retries === 0 && isMounted) {
+            setLoading(false);
+          } else {
+            await new Promise((r) => setTimeout(r, delay));
+          }
+        }
+      }
+    };
+
+    fetchTopManga();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [topManga]);
 
   const handleMangaSearch = async (query) => {
     if (!query || !query.trim()) {
@@ -26,7 +76,7 @@ export default function Manga({ topManga = [] }) {
     // 1. Instant local title match
     const existingIds = new Set();
     const combined = [];
-    const localMatches = mangaList.filter((m) => matchesSearchQuery(m, trimmed));
+    const localMatches = (mangaData || []).filter((m) => matchesSearchQuery(m, trimmed));
     localMatches.forEach((item) => {
       if (item?.mal_id && !existingIds.has(item.mal_id)) {
         existingIds.add(item.mal_id);
@@ -88,7 +138,7 @@ export default function Manga({ topManga = [] }) {
   const isSearchActive = Boolean(searchQuery.trim());
   const isGenreActive = selectedGenre && selectedGenre !== "All";
 
-  const rawList = isSearchActive ? searchResults : mangaList;
+  const rawList = isSearchActive ? searchResults : mangaData;
   const displayedManga = rawList.filter((item) => matchesGenreFilter(item, selectedGenre));
 
   return (
@@ -142,7 +192,12 @@ export default function Manga({ topManga = [] }) {
           )}
         </div>
 
-        {isSearching && displayedManga.length === 0 ? (
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin shadow-[0_0_20px_rgba(168,85,247,0.4)]"></div>
+            <p className="text-zinc-300 font-medium text-sm">Loading Manga titles...</p>
+          </div>
+        ) : isSearching && displayedManga.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin shadow-[0_0_20px_rgba(168,85,247,0.4)]"></div>
             <p className="text-zinc-300 font-medium text-sm">Searching manga for "{searchQuery}"...</p>
