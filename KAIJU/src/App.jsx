@@ -10,6 +10,7 @@ import Manga from "./pages/Manga";
 import OneAnime from "./pages/OneAnime";
 import ScrollToTop from "./components/ScrollToTop";
 import OneManga from "./pages/OneManga";
+import { matchesSearchQuery } from "./utils/genreFilter";
 
 export default function App() {
   const [topAnime, setTopAnime] = useState([]);
@@ -35,23 +36,52 @@ export default function App() {
       navigate("/");
     }
 
+    // 1. Instantly populate with in-memory matching titles from top lists
+    const existingIds = new Set();
+    const combined = [];
+
+    const localAnimeMatches = topAnime.filter((a) => matchesSearchQuery(a, trimmed));
+    const localMangaMatches = topManga.filter((m) => matchesSearchQuery(m, trimmed));
+
+    [...localAnimeMatches, ...localMangaMatches].forEach((item) => {
+      if (item?.mal_id && !existingIds.has(item.mal_id)) {
+        existingIds.add(item.mal_id);
+        combined.push(item);
+      }
+    });
+
+    // Show instant local search results immediately
+    setSearchResults([...combined]);
+
     try {
-      const [animeRes, mangaRes] = await Promise.allSettled([
-        fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(trimmed)}`),
-        fetch(`https://api.jikan.moe/v4/manga?q=${encodeURIComponent(trimmed)}`),
-      ]);
-
-      let combined = [];
-      if (animeRes.status === "fulfilled" && animeRes.value.ok) {
-        const data = await animeRes.value.json();
-        if (data.data) combined.push(...data.data);
-      }
-      if (mangaRes.status === "fulfilled" && mangaRes.value.ok) {
-        const data = await mangaRes.value.json();
-        if (data.data) combined.push(...data.data);
+      // 2. Fetch API Anime
+      const resAnime = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(trimmed)}&limit=25`);
+      if (resAnime.ok) {
+        const animeData = await resAnime.json();
+        (animeData.data || []).forEach((item) => {
+          if (item?.mal_id && !existingIds.has(item.mal_id)) {
+            existingIds.add(item.mal_id);
+            combined.push(item);
+          }
+        });
+        setSearchResults([...combined]);
       }
 
-      setSearchResults(combined);
+      // Small delay to prevent Jikan 429 rate limit
+      await new Promise((resolve) => setTimeout(resolve, 250));
+
+      // 3. Fetch API Manga
+      const resManga = await fetch(`https://api.jikan.moe/v4/manga?q=${encodeURIComponent(trimmed)}&limit=25`);
+      if (resManga.ok) {
+        const mangaData = await resManga.json();
+        (mangaData.data || []).forEach((item) => {
+          if (item?.mal_id && !existingIds.has(item.mal_id)) {
+            existingIds.add(item.mal_id);
+            combined.push(item);
+          }
+        });
+        setSearchResults([...combined]);
+      }
     } catch (error) {
       console.error("Search failed:", error);
     } finally {

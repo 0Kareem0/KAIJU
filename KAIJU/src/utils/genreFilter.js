@@ -1,3 +1,19 @@
+export const matchesSearchQuery = (item, query) => {
+  if (!query || !query.trim()) return true;
+  if (!item) return false;
+
+  const q = query.toLowerCase().trim();
+
+  const titles = [
+    item.title,
+    item.title_english,
+    item.title_japanese,
+    ...(item.titles || []).map((t) => t.title),
+  ].filter(Boolean);
+
+  return titles.some((t) => t.toLowerCase().includes(q));
+};
+
 export const matchesGenreFilter = (item, genre) => {
   if (!genre || genre === "All") return true;
   if (!item) return false;

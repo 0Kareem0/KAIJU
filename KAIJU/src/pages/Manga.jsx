@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AnimeCard from "../components/AnimeCard";
 import GenresSection from "../components/GenresSection";
-import { matchesGenreFilter } from "../utils/genreFilter";
+import { matchesGenreFilter, matchesSearchQuery } from "../utils/genreFilter";
 
 export default function Manga({ topManga = [] }) {
   const mangaList = Array.isArray(topManga) ? topManga : [];
@@ -23,11 +23,30 @@ export default function Manga({ topManga = [] }) {
     setSearchQuery(trimmed);
     setIsSearching(true);
 
+    // 1. Instant local title match
+    const existingIds = new Set();
+    const combined = [];
+    const localMatches = mangaList.filter((m) => matchesSearchQuery(m, trimmed));
+    localMatches.forEach((item) => {
+      if (item?.mal_id && !existingIds.has(item.mal_id)) {
+        existingIds.add(item.mal_id);
+        combined.push(item);
+      }
+    });
+
+    setSearchResults([...combined]);
+
     try {
-      const res = await fetch(`https://api.jikan.moe/v4/manga?q=${encodeURIComponent(trimmed)}`);
+      const res = await fetch(`https://api.jikan.moe/v4/manga?q=${encodeURIComponent(trimmed)}&limit=25`);
       if (res.ok) {
         const result = await res.json();
-        setSearchResults(result.data || []);
+        (result.data || []).forEach((item) => {
+          if (item?.mal_id && !existingIds.has(item.mal_id)) {
+            existingIds.add(item.mal_id);
+            combined.push(item);
+          }
+        });
+        setSearchResults([...combined]);
       }
     } catch (error) {
       console.error("Manga search failed:", error);
@@ -123,7 +142,7 @@ export default function Manga({ topManga = [] }) {
           )}
         </div>
 
-        {isSearching ? (
+        {isSearching && displayedManga.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin shadow-[0_0_20px_rgba(168,85,247,0.4)]"></div>
             <p className="text-zinc-300 font-medium text-sm">Searching manga for "{searchQuery}"...</p>
