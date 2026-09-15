@@ -2,6 +2,7 @@ import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AnimeCard from "../components/AnimeCard";
+import GenresSection from "../components/GenresSection";
 
 export default function Manga({ topManga = [] }) {
   const mangaList = Array.isArray(topManga) ? topManga : [];
@@ -10,7 +11,7 @@ export default function Manga({ topManga = [] }) {
   const [isSearching, setIsSearching] = useState(false);
 
   const handleMangaSearch = async (query) => {
-    if (!query.trim()) {
+    if (!query || !query.trim() || query === "All") {
       setSearchQuery("");
       setSearchResults([]);
       return;
@@ -27,9 +28,15 @@ export default function Manga({ topManga = [] }) {
         setSearchResults(result.data || []);
       }
     } catch (error) {
-          console.error("Manga search failed:", error);
+      console.error("Manga search failed:", error);
     } finally {
       setIsSearching(false);
+      setTimeout(() => {
+        const target = document.getElementById("trending");
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
     }
   };
 
@@ -65,8 +72,11 @@ export default function Manga({ topManga = [] }) {
         </div>
       </section>
 
+      {/* GENRES SECTION FOR MANGA */}
+      <GenresSection onSelectGenre={handleMangaSearch} />
+
       {/* MANGA GRID */}
-      <section className="px-4 sm:px-6 md:px-12 pb-24 flex-1 max-w-7xl mx-auto w-full">
+      <section id="trending" className="px-4 sm:px-6 md:px-12 pb-24 flex-1 max-w-7xl mx-auto w-full scroll-mt-20">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-10 gap-4 border-b border-white/10 pb-5">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white flex items-center gap-2">
             <span>{isSearchActive ? "🔍" : "🔥"}</span>

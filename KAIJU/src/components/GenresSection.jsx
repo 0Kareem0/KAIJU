@@ -1,7 +1,7 @@
 import GenreButton from "./GenreButton";
 import { useState, useEffect } from "react";
 
-export default function GenresSection() {
+export default function GenresSection({ onSelectGenre }) {
   const [showButton, setShowButton] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState("All");
 
@@ -27,6 +27,13 @@ export default function GenresSection() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleGenreClick = (genreTitle) => {
+    setSelectedGenre(genreTitle);
+    if (onSelectGenre) {
+      onSelectGenre(genreTitle);
+    }
+  };
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -49,7 +56,7 @@ export default function GenresSection() {
               Browse By Genre
             </h2>
             <p className="text-zinc-400 text-xs sm:text-sm mt-1 max-w-xl">
-              Filter anime and manga titles by your favorite story categories.
+              Select a story category below to filter titles instantly.
             </p>
           </div>
 
@@ -61,7 +68,7 @@ export default function GenresSection() {
                 title={genre.title}
                 icon={genre.icon}
                 active={selectedGenre === genre.title}
-                onClick={() => setSelectedGenre(genre.title)}
+                onClick={() => handleGenreClick(genre.title)}
               />
             ))}
           </div>

@@ -20,7 +20,7 @@ export default function App() {
   const navigate = useNavigate();
 
   const handleSearch = async (query) => {
-    if (!query || !query.trim()) {
+    if (!query || !query.trim() || query === "All") {
       setSearchQuery("");
       setSearchResults([]);
       return;
@@ -35,11 +35,22 @@ export default function App() {
     }
 
     try {
-      const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(trimmed)}`);
-      if (res.ok) {
-        const result = await res.json();
-        setSearchResults(result.data || []);
+      const [animeRes, mangaRes] = await Promise.allSettled([
+        fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(trimmed)}`),
+        fetch(`https://api.jikan.moe/v4/manga?q=${encodeURIComponent(trimmed)}`),
+      ]);
+
+      let combined = [];
+      if (animeRes.status === "fulfilled" && animeRes.value.ok) {
+        const data = await animeRes.value.json();
+        if (data.data) combined.push(...data.data);
       }
+      if (mangaRes.status === "fulfilled" && mangaRes.value.ok) {
+        const data = await mangaRes.value.json();
+        if (data.data) combined.push(...data.data);
+      }
+
+      setSearchResults(combined);
     } catch (error) {
       console.error("Search failed:", error);
     } finally {
@@ -84,7 +95,7 @@ export default function App() {
         const result = await res.json();
         setTopManga(result.data || []);
       } catch (error) {
-        console.error("Failed to fetch episodes data:", error);
+        console.error("Failed to fetch manga data:", error);
       }
     };
     getTopManga();
@@ -108,7 +119,7 @@ export default function App() {
                   isSearching={isSearching}
                   onClearSearch={handleClearSearch}
                 />
-                <GenresSection topAnime={topAnime} topManga={topManga} onSelectGenre={handleSearch} />
+                <GenresSection onSelectGenre={handleSearch} />
               </main>
               <Footer />
             </div>
@@ -129,5 +140,3 @@ export default function App() {
     </div>
   );
 }
-
-

@@ -1,16 +1,32 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function AnimeCard({ item }) {
   const [liked, setLiked] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   if (!item) return null;
 
-  const isManga = item.type === "Manga" || item.chapters !== undefined;
+  const itemType = (item.type || "").toLowerCase();
+  const isMangaType =
+    itemType === "manga" ||
+    itemType === "manhwa" ||
+    itemType === "manhua" ||
+    itemType === "light novel" ||
+    itemType === "lightnovel" ||
+    itemType === "novel" ||
+    itemType === "one-shot" ||
+    itemType === "oneshot" ||
+    itemType === "doujinshi" ||
+    item.chapters !== undefined ||
+    item.volumes !== undefined ||
+    item.authors !== undefined ||
+    location.pathname.startsWith("/manga") ||
+    location.pathname.startsWith("/oneManga");
 
   const handleClick = () => {
-    if (isManga) {
+    if (isMangaType) {
       navigate(`/oneManga/${item.mal_id}`);
     } else {
       navigate(`/oneAnime/${item.mal_id}`);
@@ -64,10 +80,10 @@ export default function AnimeCard({ item }) {
         {/* Bottom Badge: Type / Status */}
         <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center z-20">
           <span className="px-2.5 py-0.5 bg-gradient-to-r from-purple-600 to-indigo-600 backdrop-blur-sm text-white text-[9px] sm:text-[10px] font-black uppercase tracking-wider rounded-md shadow-md">
-            {item.type || (isManga ? "MANGA" : "ANIME")}
+            {item.type || (isMangaType ? "MANGA" : "ANIME")}
           </span>
           <span className="text-[10px] sm:text-xs text-zinc-200 font-semibold bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-md border border-white/10">
-            {isManga
+            {isMangaType
               ? item.chapters
                 ? `${item.chapters} Ch`
                 : "Ongoing"
@@ -87,13 +103,13 @@ export default function AnimeCard({ item }) {
         <p className="text-zinc-400 text-[10px] sm:text-xs mt-1.5 line-clamp-1 leading-snug">
           {item.genres?.map((g) => g.name).join(", ") ||
             item.type ||
-            "Action"}
+            "Story"}
         </p>
 
         {/* Action Buttons */}
         <div className="flex gap-2 mt-auto pt-3.5 sm:pt-4">
           <button className="flex-1 py-2 sm:py-2.5 px-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold transition-all active:scale-95 text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-md shadow-purple-500/20 group-hover:shadow-purple-500/40">
-            <span>{isManga ? "Read" : "Watch"}</span>
+            <span>{isMangaType ? "Read" : "Watch"}</span>
             <span className="text-[10px] sm:text-xs">▶</span>
           </button>
           <button

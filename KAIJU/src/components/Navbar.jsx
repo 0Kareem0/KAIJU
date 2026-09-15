@@ -1,22 +1,45 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function Navbar({ onSearch }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
 
   const onSubmit = (e) => {
     e.preventDefault();
     if (inputValue.trim()) {
-      if (onSearch) onSearch(inputValue.trim());
+      const query = inputValue.trim();
+      setInputValue(""); // Delete typed text after submitting search as requested!
       setIsMenuOpen(false);
+      if (onSearch) {
+        onSearch(query);
+      }
     }
   };
 
   const handleClearInput = () => {
     setInputValue("");
     if (onSearch) onSearch("");
+  };
+
+  const handleSectionClick = (e, sectionId) => {
+    e.preventDefault();
+    setIsMenuOpen(false);
+
+    // Check if section exists on current page
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // Navigate home with section anchor
+      navigate(`/#${sectionId}`);
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
   };
 
   // Close mobile menu automatically on desktop resize
@@ -66,6 +89,7 @@ export default function Navbar({ onSearch }) {
 
             <a
               href="#trending"
+              onClick={(e) => handleSectionClick(e, "trending")}
               className="hover:text-white transition-colors relative py-1"
             >
               Trending
@@ -85,6 +109,7 @@ export default function Navbar({ onSearch }) {
 
             <a
               href="#genres"
+              onClick={(e) => handleSectionClick(e, "genres")}
               className="hover:text-white transition-colors relative py-1"
             >
               Genres
@@ -181,10 +206,10 @@ export default function Navbar({ onSearch }) {
 
             <a
               href="#trending"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={(e) => handleSectionClick(e, "trending")}
               className="flex items-center gap-3 py-3 px-4 rounded-2xl hover:bg-zinc-900 hover:text-white transition-all"
             >
-              <span className="text-base">🔥</span> Trending Anime
+              <span className="text-base">🔥</span> Trending
             </a>
 
             <Link
@@ -201,7 +226,7 @@ export default function Navbar({ onSearch }) {
 
             <a
               href="#genres"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={(e) => handleSectionClick(e, "genres")}
               className="flex items-center gap-3 py-3 px-4 rounded-2xl hover:bg-zinc-900 hover:text-white transition-all"
             >
               <span className="text-base">🏷️</span> Browse Genres
@@ -225,6 +250,7 @@ export default function Navbar({ onSearch }) {
 
           <a
             href="#trending"
+            onClick={(e) => handleSectionClick(e, "trending")}
             className="flex flex-col items-center py-1.5 px-3 rounded-2xl text-zinc-400 hover:text-white transition-all"
           >
             <span className="text-lg">🔥</span>
@@ -243,6 +269,7 @@ export default function Navbar({ onSearch }) {
 
           <a
             href="#genres"
+            onClick={(e) => handleSectionClick(e, "genres")}
             className="flex flex-col items-center py-1.5 px-3 rounded-2xl text-zinc-400 hover:text-white transition-all"
           >
             <span className="text-lg">🏷️</span>

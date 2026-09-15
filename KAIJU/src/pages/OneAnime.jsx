@@ -8,33 +8,76 @@ export default function OneAnime({ topAnime = [], onSearch }) {
   const navigate = useNavigate();
   const [animeData, setAnimeData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const found = topAnime?.find((a) => a.mal_id === parseInt(id));
-    if (found) {
-      setAnimeData(found);
-      setLoading(false);
-    } else {
-      const fetchAnime = async () => {
-        try {
-          setLoading(true);
-          const res = await fetch(`https://api.jikan.moe/v4/anime/${id}`);
-          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-          const result = await res.json();
-          setAnimeData(result.data);
-        } catch (error) {
-          console.error("Failed to fetch anime details:", error);
-        } finally {
+    let isMounted = true;
+
+    const loadAnime = async () => {
+      setLoading(true);
+      setError(null);
+
+      // 1. Check if found in topAnime props
+      const foundInProps = topAnime?.find((a) => a.mal_id === parseInt(id));
+      if (foundInProps && foundInProps.synopsis) {
+        if (isMounted) {
+          setAnimeData(foundInProps);
           setLoading(false);
         }
-      };
-      fetchAnime();
-    }
+        return;
+      }
+
+      // 2. Fetch from Jikan API with retry
+      let retries = 3;
+      let delay = 1000;
+
+      while (retries > 0) {
+        try {
+          const res = await fetch(`https://api.jikan.moe/v4/anime/${id}`);
+          if (res.status === 429) {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+            delay *= 1.5;
+            retries--;
+            continue;
+          }
+          if (!res.ok) throw new Error(`HTTP error status: ${res.status}`);
+          const result = await res.json();
+          if (isMounted) {
+            setAnimeData(result.data);
+            setLoading(false);
+          }
+          return;
+        } catch (err) {
+          retries--;
+          if (retries === 0) {
+            if (foundInProps) {
+              if (isMounted) {
+                setAnimeData(foundInProps);
+                setLoading(false);
+              }
+              return;
+            }
+            if (isMounted) {
+              setError("Failed to load anime details. Please try again.");
+              setLoading(false);
+            }
+          } else {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+          }
+        }
+      }
+    };
+
+    loadAnime();
+
+    return () => {
+      isMounted = false;
+    };
   }, [id, topAnime]);
 
   const anime = animeData;
 
-  if (loading || !anime) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-zinc-950 flex flex-col justify-center items-center text-white p-4">
         <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-4 shadow-[0_0_20px_rgba(168,85,247,0.4)]"></div>
@@ -45,6 +88,30 @@ export default function OneAnime({ topAnime = [], onSearch }) {
         >
           ← Back to Home
         </button>
+      </div>
+    );
+  }
+
+  if (error || !anime) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex flex-col justify-center items-center text-white p-4">
+        <div className="text-4xl mb-3">⚠️</div>
+        <p className="text-zinc-300 text-base font-bold mb-2">Unable to load Anime details</p>
+        <p className="text-zinc-500 text-xs mb-6 text-center max-w-sm">{error || "Data unavailable from the Jikan API right now."}</p>
+        <div className="flex gap-3">
+          <button
+            onClick={() => window.location.reload()}
+            className="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-2xl text-xs font-bold transition-all shadow-md"
+          >
+            Retry Loading
+          </button>
+          <button
+            onClick={() => navigate("/")}
+            className="px-5 py-2.5 bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-white rounded-2xl text-xs font-bold transition-all"
+          >
+            Back to Home
+          </button>
+        </div>
       </div>
     );
   }

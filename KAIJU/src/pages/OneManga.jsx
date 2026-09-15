@@ -8,33 +8,77 @@ export default function OneManga({ topManga = [], onSearch }) {
   const navigate = useNavigate();
   const [mangaData, setMangaData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const found = topManga?.find((a) => a.mal_id === parseInt(id));
-    if (found) {
-      setMangaData(found);
-      setLoading(false);
-    } else {
-      const fetchManga = async () => {
-        try {
-          setLoading(true);
-          const res = await fetch(`https://api.jikan.moe/v4/manga/${id}`);
-          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-          const result = await res.json();
-          setMangaData(result.data);
-        } catch (error) {
-          console.error("Failed to fetch manga details:", error);
-        } finally {
+    let isMounted = true;
+
+    const loadManga = async () => {
+      setLoading(true);
+      setError(null);
+
+      // 1. First check if it exists in topManga prop
+      const foundInProps = topManga?.find((a) => a.mal_id === parseInt(id));
+      if (foundInProps && foundInProps.synopsis) {
+        if (isMounted) {
+          setMangaData(foundInProps);
           setLoading(false);
         }
-      };
-      fetchManga();
-    }
+        return;
+      }
+
+      // 2. Otherwise fetch from Jikan API with rate-limit retry
+      let retries = 3;
+      let delay = 1000;
+
+      while (retries > 0) {
+        try {
+          const res = await fetch(`https://api.jikan.moe/v4/manga/${id}`);
+          if (res.status === 429) {
+            // Rate limited, wait and retry
+            await new Promise((resolve) => setTimeout(resolve, delay));
+            delay *= 1.5;
+            retries--;
+            continue;
+          }
+          if (!res.ok) throw new Error(`Server returned status: ${res.status}`);
+          const result = await res.json();
+          if (isMounted) {
+            setMangaData(result.data);
+            setLoading(false);
+          }
+          return;
+        } catch (err) {
+          retries--;
+          if (retries === 0) {
+            if (foundInProps) {
+              if (isMounted) {
+                setMangaData(foundInProps);
+                setLoading(false);
+              }
+              return;
+            }
+            if (isMounted) {
+              setError("Failed to load manga details. Please try again.");
+              setLoading(false);
+            }
+          } else {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+          }
+        }
+      }
+    };
+
+    loadManga();
+
+    return () => {
+      isMounted = false;
+    };
   }, [id, topManga]);
 
   const manga = mangaData;
 
-  if (loading || !manga) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-zinc-950 flex flex-col justify-center items-center text-white p-4">
         <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-4 shadow-[0_0_20px_rgba(168,85,247,0.4)]"></div>
@@ -45,6 +89,30 @@ export default function OneManga({ topManga = [], onSearch }) {
         >
           ← Back to Manga Hub
         </button>
+      </div>
+    );
+  }
+
+  if (error || !manga) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex flex-col justify-center items-center text-white p-4">
+        <div className="text-4xl mb-3">⚠️</div>
+        <p className="text-zinc-300 text-base font-bold mb-2">Unable to load Manga details</p>
+        <p className="text-zinc-500 text-xs mb-6 text-center max-w-sm">{error || "Data unavailable from the Jikan API right now."}</p>
+        <div className="flex gap-3">
+          <button
+            onClick={() => window.location.reload()}
+            className="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-2xl text-xs font-bold transition-all shadow-md"
+          >
+            Retry Loading
+          </button>
+          <button
+            onClick={() => navigate("/manga")}
+            className="px-5 py-2.5 bg-zinc-900 hover:bg-zinc-800 border border-white/10 text-white rounded-2xl text-xs font-bold transition-all"
+          >
+            Back to Manga Hub
+          </button>
+        </div>
       </div>
     );
   }
