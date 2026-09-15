@@ -16,11 +16,12 @@ export default function App() {
   const [topManga, setTopManga] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("All");
   const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
 
   const handleSearch = async (query) => {
-    if (!query || !query.trim() || query === "All") {
+    if (!query || !query.trim()) {
       setSearchQuery("");
       setSearchResults([]);
       return;
@@ -64,9 +65,23 @@ export default function App() {
     }
   };
 
+  const handleSelectGenre = (genreTitle) => {
+    setSelectedGenre(genreTitle);
+    setTimeout(() => {
+      const target = document.getElementById("trending");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 150);
+  };
+
   const handleClearSearch = () => {
     setSearchQuery("");
     setSearchResults([]);
+  };
+
+  const handleClearGenre = () => {
+    setSelectedGenre("All");
   };
 
   useEffect(() => {
@@ -116,10 +131,12 @@ export default function App() {
                   topAnime={topAnime}
                   searchResults={searchResults}
                   searchQuery={searchQuery}
+                  selectedGenre={selectedGenre}
                   isSearching={isSearching}
                   onClearSearch={handleClearSearch}
+                  onClearGenre={handleClearGenre}
                 />
-                <GenresSection onSelectGenre={handleSearch} />
+                <GenresSection selectedGenre={selectedGenre} onSelectGenre={handleSelectGenre} />
               </main>
               <Footer />
             </div>

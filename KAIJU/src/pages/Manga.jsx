@@ -3,15 +3,17 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AnimeCard from "../components/AnimeCard";
 import GenresSection from "../components/GenresSection";
+import { matchesGenreFilter } from "../utils/genreFilter";
 
 export default function Manga({ topManga = [] }) {
   const mangaList = Array.isArray(topManga) ? topManga : [];
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("All");
   const [isSearching, setIsSearching] = useState(false);
 
   const handleMangaSearch = async (query) => {
-    if (!query || !query.trim() || query === "All") {
+    if (!query || !query.trim()) {
       setSearchQuery("");
       setSearchResults([]);
       return;
@@ -40,13 +42,35 @@ export default function Manga({ topManga = [] }) {
     }
   };
 
+  const handleSelectGenre = (genreTitle) => {
+    setSelectedGenre(genreTitle);
+    setTimeout(() => {
+      const target = document.getElementById("trending");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  };
+
   const handleClearSearch = () => {
     setSearchQuery("");
     setSearchResults([]);
   };
 
+  const handleClearGenre = () => {
+    setSelectedGenre("All");
+  };
+
+  const handleResetFilters = () => {
+    handleClearSearch();
+    handleClearGenre();
+  };
+
   const isSearchActive = Boolean(searchQuery.trim());
-  const displayedManga = isSearchActive ? searchResults : mangaList;
+  const isGenreActive = selectedGenre && selectedGenre !== "All";
+
+  const rawList = isSearchActive ? searchResults : mangaList;
+  const displayedManga = rawList.filter((item) => matchesGenreFilter(item, selectedGenre));
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col overflow-x-hidden">
@@ -73,22 +97,28 @@ export default function Manga({ topManga = [] }) {
       </section>
 
       {/* GENRES SECTION FOR MANGA */}
-      <GenresSection onSelectGenre={handleMangaSearch} />
+      <GenresSection selectedGenre={selectedGenre} onSelectGenre={handleSelectGenre} />
 
       {/* MANGA GRID */}
       <section id="trending" className="px-4 sm:px-6 md:px-12 pb-24 flex-1 max-w-7xl mx-auto w-full scroll-mt-20">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-10 gap-4 border-b border-white/10 pb-5">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white flex items-center gap-2">
-            <span>{isSearchActive ? "🔍" : "🔥"}</span>
-            {isSearchActive ? `Results for "${searchQuery}"` : "Top Ranked Manga"}
+            <span>{isSearchActive ? "🔍" : isGenreActive ? "🏷️" : "🔥"}</span>
+            {isSearchActive
+              ? isGenreActive
+                ? `"${searchQuery}" in ${selectedGenre}`
+                : `Results for "${searchQuery}"`
+              : isGenreActive
+              ? `${selectedGenre} Manga`
+              : "Top Ranked Manga"}
           </h2>
 
-          {isSearchActive && (
+          {(isSearchActive || isGenreActive) && (
             <button
-              onClick={handleClearSearch}
+              onClick={handleResetFilters}
               className="px-4 py-2.5 rounded-2xl bg-zinc-900 border border-white/15 hover:border-purple-500/40 text-xs font-bold text-zinc-300 hover:text-white transition-all active:scale-95 flex items-center gap-2 shadow-md"
             >
-              <span>✖ Clear Search</span>
+              <span>✖ Clear Filter</span>
             </button>
           )}
         </div>
@@ -106,8 +136,20 @@ export default function Manga({ topManga = [] }) {
           </div>
         ) : (
           <div className="text-center py-20 px-6 text-zinc-400 text-sm bg-zinc-900/50 rounded-3xl border border-white/10 backdrop-blur-xl">
-            <p className="text-lg font-bold text-white mb-1">No manga found matching "{searchQuery}"</p>
-            <p className="text-xs text-zinc-500">Try searching for another manga title or keyword.</p>
+            <p className="text-lg font-bold text-white mb-1">
+              {isSearchActive && isGenreActive
+                ? `No ${selectedGenre} manga found matching "${searchQuery}"`
+                : isSearchActive
+                ? `No manga found matching "${searchQuery}"`
+                : `No manga found in category "${selectedGenre}"`}
+            </p>
+            <p className="text-xs text-zinc-500 mt-1">Try selecting another genre category or keyword.</p>
+            <button
+              onClick={handleResetFilters}
+              className="mt-4 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold transition-all"
+            >
+              Reset Filters
+            </button>
           </div>
         )}
       </section>

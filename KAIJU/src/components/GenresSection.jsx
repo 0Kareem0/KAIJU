@@ -1,9 +1,8 @@
 import GenreButton from "./GenreButton";
 import { useState, useEffect } from "react";
 
-export default function GenresSection({ onSelectGenre }) {
+export default function GenresSection({ selectedGenre = "All", onSelectGenre }) {
   const [showButton, setShowButton] = useState(false);
-  const [selectedGenre, setSelectedGenre] = useState("All");
 
   const genres = [
     { title: "All", icon: "✨" },
@@ -28,7 +27,6 @@ export default function GenresSection({ onSelectGenre }) {
   }, []);
 
   const handleGenreClick = (genreTitle) => {
-    setSelectedGenre(genreTitle);
     if (onSelectGenre) {
       onSelectGenre(genreTitle);
     }

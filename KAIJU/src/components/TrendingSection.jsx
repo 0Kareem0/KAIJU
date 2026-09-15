@@ -1,40 +1,65 @@
 import AnimeCard from "./AnimeCard";
+import { matchesGenreFilter } from "../utils/genreFilter";
 
 export default function TrendingSection({
   topAnime = [],
   searchResults = [],
   searchQuery = "",
+  selectedGenre = "All",
   isSearching = false,
   onClearSearch,
+  onClearGenre,
 }) {
   const isSearchActive = Boolean(searchQuery.trim());
-  const animeList = isSearchActive ? searchResults : topAnime;
+  const isGenreActive = selectedGenre && selectedGenre !== "All";
+  
+  const rawList = isSearchActive ? searchResults : topAnime;
+  const filteredList = rawList.filter((item) => matchesGenreFilter(item, selectedGenre));
+
+  const handleResetFilters = () => {
+    if (onClearSearch) onClearSearch();
+    if (onClearGenre) onClearGenre();
+  };
 
   return (
     <section id="trending" className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-16 sm:pb-24 scroll-mt-20">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-4 border-b border-white/10 pb-6">
         <div>
           <div className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-xs sm:text-sm font-semibold mb-3">
-            {isSearchActive ? "🔍 Search Results" : "🔥 Top Anime Releases"}
+            {isSearchActive ? (
+              <span>🔍 Search Results</span>
+            ) : isGenreActive ? (
+              <span>🏷️ Genre: {selectedGenre}</span>
+            ) : (
+              <span>🔥 Top Anime Releases</span>
+            )}
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black bg-gradient-to-r from-white via-purple-100 to-purple-400 bg-clip-text text-transparent">
-            {isSearchActive ? `Results for "${searchQuery}"` : "Trending Now"}
+            {isSearchActive
+              ? isGenreActive
+                ? `"${searchQuery}" in ${selectedGenre}`
+                : `Results for "${searchQuery}"`
+              : isGenreActive
+              ? `${selectedGenre} Anime`
+              : "Trending Now"}
           </h2>
 
           <p className="text-zinc-400 mt-2 text-xs sm:text-base max-w-md">
             {isSearchActive
-              ? `Showing search results matching your query.`
+              ? `Showing results matching "${searchQuery}".`
+              : isGenreActive
+              ? `Filtered by ${selectedGenre} genre.`
               : "The most popular anime series everyone is watching right now."}
           </p>
         </div>
 
-        {isSearchActive && (
+        {(isSearchActive || isGenreActive) && (
           <button
-            onClick={onClearSearch}
+            onClick={handleResetFilters}
             className="px-4 py-2.5 rounded-2xl bg-zinc-900 border border-white/15 hover:border-purple-500/40 text-xs sm:text-sm font-bold text-zinc-300 hover:text-white transition-all active:scale-95 flex items-center gap-2 self-start sm:self-auto shadow-md"
           >
-            <span>✖ Clear Search</span>
+            <span>✖ Clear Filter</span>
           </button>
         )}
       </div>
@@ -44,16 +69,28 @@ export default function TrendingSection({
           <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin shadow-[0_0_20px_rgba(168,85,247,0.4)]"></div>
           <p className="text-zinc-300 font-medium text-sm">Searching for "{searchQuery}"...</p>
         </div>
-      ) : animeList.length > 0 ? (
+      ) : filteredList.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6">
-          {animeList.map((anime) => (
+          {filteredList.map((anime) => (
             <AnimeCard key={anime.mal_id} item={anime} />
           ))}
         </div>
       ) : (
         <div className="text-center py-20 px-6 text-zinc-400 text-sm bg-zinc-900/50 rounded-3xl border border-white/10 backdrop-blur-xl">
-          <p className="text-lg font-bold text-white mb-1">No anime found matching "{searchQuery}"</p>
-          <p className="text-xs text-zinc-500">Try searching for another title, genre, or keyword.</p>
+          <p className="text-lg font-bold text-white mb-1">
+            {isSearchActive && isGenreActive
+              ? `No ${selectedGenre} anime found matching "${searchQuery}"`
+              : isSearchActive
+              ? `No anime found matching "${searchQuery}"`
+              : `No anime found in category "${selectedGenre}"`}
+          </p>
+          <p className="text-xs text-zinc-500 mt-1">Try selecting another genre category or keyword.</p>
+          <button
+            onClick={handleResetFilters}
+            className="mt-4 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold transition-all"
+          >
+            Reset Filters
+          </button>
         </div>
       )}
     </section>
