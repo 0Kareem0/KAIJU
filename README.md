@@ -15,4 +15,4 @@ Anime platform built with React, Vite, TailwindCSS, and Jikan API.
 - Jikan API
 
 ## Live Demo
-[https://kaiju-phi.vercel.app](https://kaiju-phi.vercel.app)
+[[https://kaiju-phi.vercel.app](https://kitchen-ai-seven.vercel.app/)]([https://kaiju-phi.vercel.app](https://kitchen-ai-seven.vercel.app/))
